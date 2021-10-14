@@ -2,6 +2,8 @@ package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class SteamInfo {
 
     private String ratingText;
@@ -34,5 +36,18 @@ public class SteamInfo {
                 ", ratingPercent=" + ratingPercent +
                 ", ratingCount=" + ratingCount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SteamInfo steamInfo = (SteamInfo) o;
+        return ratingPercent == steamInfo.ratingPercent && ratingCount == steamInfo.ratingCount && Objects.equals(ratingText, steamInfo.ratingText);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ratingText, ratingPercent, ratingCount);
     }
 }

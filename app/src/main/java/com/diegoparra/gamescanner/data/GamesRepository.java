@@ -7,13 +7,13 @@ import com.diegoparra.gamescanner.models.Store;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 public interface GamesRepository {
 
-    Observable<List<Store>> getStores();
-    Observable<List<DealWithGameInfo>> getDealsWithGameInfo();
-    Observable<Game> getGameInfoByDealId(String dealId);
-    Observable<List<Deal>> getDealsForGame(String gameId);
+    Single<List<Store>> getStores();
+    Single<List<DealWithGameInfo>> getDealsWithGameInfo();
+    Single<Game> getGameInfoByDealId(String dealId);
+    Single<List<Deal>> getDealsForGame(String gameId);
 
 }

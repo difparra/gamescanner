@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 
 public class Game {
 
@@ -60,5 +61,18 @@ public class Game {
                 ", metacriticInfo=" + metacriticInfo +
                 ", releaseDate=" + releaseDate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return gameId.equals(game.gameId) && Objects.equals(title, game.title) && Objects.equals(imageUrl, game.imageUrl) && Objects.equals(steamInfo, game.steamInfo) && Objects.equals(metacriticInfo, game.metacriticInfo) && Objects.equals(releaseDate, game.releaseDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameId, title, imageUrl, steamInfo, metacriticInfo, releaseDate);
     }
 }

@@ -2,6 +2,8 @@ package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class Store {
 
     private String id;
@@ -55,5 +57,18 @@ public class Store {
                 ", logoUrl='" + logoUrl + '\'' +
                 ", iconUrl='" + iconUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Store store = (Store) o;
+        return isActive == store.isActive && id.equals(store.id) && Objects.equals(name, store.name) && Objects.equals(bannerUrl, store.bannerUrl) && Objects.equals(logoUrl, store.logoUrl) && Objects.equals(iconUrl, store.iconUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, isActive, bannerUrl, logoUrl, iconUrl);
     }
 }

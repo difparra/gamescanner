@@ -1,7 +1,8 @@
 package com.diegoparra.gamescanner.utils;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.function.Function;
 
 public class ListUtils {
 
-    public static <T, R> List<R> map(@NotNull List<T> list, @NotNull Function<? super T, ? extends R> mapper) {
+    public static <T, R> List<R> map(@NonNull List<T> list, @NonNull Function<? super T, ? extends R> mapper) {
         Objects.requireNonNull(list);
         Objects.requireNonNull(mapper);
 
@@ -21,7 +22,7 @@ public class ListUtils {
         return newList;
     }
 
-    public static <T> String joinToString(@NotNull List<T> list, @NotNull Function<T, String> print, @NotNull String separator) {
+    public static <T> String joinToString(@NonNull List<T> list, @NonNull Function<T, String> print, @NonNull String separator) {
         Objects.requireNonNull(list);
         Objects.requireNonNull(print);
         Objects.requireNonNull(separator);
@@ -34,7 +35,7 @@ public class ListUtils {
         return str.toString();
     }
 
-    public static <T> String joinToString(@NotNull List<T> list, @NotNull String separator) {
+    public static <T> String joinToString(@NonNull List<T> list, @NonNull String separator) {
         return joinToString(list, Objects::toString, separator);
     }
 

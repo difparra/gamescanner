@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Function;
 import timber.log.Timber;
 
@@ -32,7 +32,7 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Observable<List<Store>> getStores() {
+    public Single<List<Store>> getStores() {
         Timber.i("getStores called!");
         return api.getStores().map(new Function<List<StoreDto>, List<Store>>() {
             @Override
@@ -45,7 +45,7 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Observable<List<DealWithGameInfo>> getDealsWithGameInfo() {
+    public Single<List<DealWithGameInfo>> getDealsWithGameInfo() {
         Timber.i("getDealsWithGameInfo called!");
         return api.getDealsWithGameInfo().map(new Function<List<DealsListItemDto>, List<DealWithGameInfo>>() {
             @Override
@@ -58,7 +58,7 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Observable<Game> getGameInfoByDealId(String dealId) {
+    public Single<Game> getGameInfoByDealId(String dealId) {
         Timber.i("getGameInfoByDealId called!");
         return api.getDealWithGameInfo(dealId).map(new Function<DealLookupResponse, Game>() {
             @Override
@@ -71,7 +71,7 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Observable<List<Deal>> getDealsForGame(String gameId) {
+    public Single<List<Deal>> getDealsForGame(String gameId) {
         Timber.i("getDealsForGame called!");
         return api.getDealsForGame(gameId).map(new Function<GameLookupResponse, List<Deal>>() {
             @Override

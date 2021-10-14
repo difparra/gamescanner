@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 
 public class Deal {
 
@@ -68,5 +69,18 @@ public class Deal {
                 ", discountPercent=" + discountPercent +
                 ", lastChange=" + lastChange +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deal deal = (Deal) o;
+        return Float.compare(deal.normalPrice, normalPrice) == 0 && Float.compare(deal.salePrice, salePrice) == 0 && Float.compare(deal.discountPercent, discountPercent) == 0 && dealId.equals(deal.dealId) && gameId.equals(deal.gameId) && storeId.equals(deal.storeId) && Objects.equals(lastChange, deal.lastChange);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dealId, gameId, storeId, normalPrice, salePrice, discountPercent, lastChange);
     }
 }

@@ -2,6 +2,7 @@ package com.diegoparra.gamescanner.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
@@ -18,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MainActivityViewModel viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
     }
+
 }
