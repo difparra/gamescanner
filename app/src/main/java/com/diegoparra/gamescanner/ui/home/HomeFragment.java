@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment {
         adapter = new DealsAdapter();
         binding.dealsList.setHasFixedSize(true);
         binding.dealsList.setAdapter(adapter);
+        binding.dealsList.addItemDecoration(new DividerItemDecoration(binding.dealsList.getContext(), DividerItemDecoration.VERTICAL));
 
         subscribeObservers();
     }

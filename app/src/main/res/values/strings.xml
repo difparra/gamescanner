@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">GameScanner</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="release_date">Released on: %s</string>
+
+    <plurals name="updated_days_ago">
+        <item quantity="zero">Today</item>
+        <item quantity="one">Yesterday</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="updated_hours_ago">
+        <item quantity="zero">Less than an hour ago</item>
+        <item quantity="one">1 hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="updated_minutes_ago">
+        <item quantity="one">1 minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+
 </resources>

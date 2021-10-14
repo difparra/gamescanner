@@ -47,7 +47,11 @@ public class Game {
     }
 
     public LocalDate getReleaseDate() {
-        return LocalDateTime.ofInstant(releaseDate, ZoneId.systemDefault()).toLocalDate();
+        if(releaseDate != null && releaseDate.getEpochSecond() > 0) {
+            return LocalDateTime.ofInstant(releaseDate, ZoneId.systemDefault()).toLocalDate();
+        }else {
+            return null;
+        }
     }
 
     @NonNull

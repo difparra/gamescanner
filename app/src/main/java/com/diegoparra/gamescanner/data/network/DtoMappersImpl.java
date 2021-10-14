@@ -44,7 +44,7 @@ public class DtoMappersImpl implements DtoMappers {
                         dealsListItemDto.getNormalPrice(),
                         dealsListItemDto.getSalePrice(),
                         dealsListItemDto.getDiscountPercent(),
-                        Instant.ofEpochSecond(dealsListItemDto.getLastChange())
+                        toInstantOrNull(dealsListItemDto.getLastChange())
                 ),
                 new Game(
                         dealsListItemDto.getGameId(),
@@ -52,7 +52,7 @@ public class DtoMappersImpl implements DtoMappers {
                         dealsListItemDto.getThumb(),
                         new SteamInfo(dealsListItemDto.getSteamRatingText(), dealsListItemDto.getSteamRatingPercent(), dealsListItemDto.getSteamRatingCount()),
                         new MetacriticInfo(METACRITIC_URL_PREFIX + dealsListItemDto.getMetacriticLink(), dealsListItemDto.getMetacriticScore()),
-                        Instant.ofEpochSecond(dealsListItemDto.getReleaseDate())
+                        toInstantOrNull(dealsListItemDto.getReleaseDate())
                 )
         );
     }
@@ -67,7 +67,7 @@ public class DtoMappersImpl implements DtoMappers {
                     gameInfoDto.getThumb(),
                     new SteamInfo(gameInfoDto.getSteamRatingText(), gameInfoDto.getSteamRatingPercent(), gameInfoDto.getSteamRatingCount()),
                     new MetacriticInfo(METACRITIC_URL_PREFIX + gameInfoDto.getMetacriticLink(), gameInfoDto.getMetacriticScore()),
-                    Instant.ofEpochSecond(gameInfoDto.getReleaseDate())
+                    toInstantOrNull(gameInfoDto.getReleaseDate())
             );
         } else {
             return null;
@@ -90,6 +90,15 @@ public class DtoMappersImpl implements DtoMappers {
                 dealDto.getDiscountPercent(),
                 null
         );
+    }
+
+
+    private Instant toInstantOrNull(long epochSecond) {
+        if(epochSecond <= 0) {
+            return null;
+        }else {
+            return Instant.ofEpochSecond(epochSecond);
+        }
     }
 
 }

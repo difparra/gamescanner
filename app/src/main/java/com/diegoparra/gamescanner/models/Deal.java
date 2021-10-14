@@ -2,6 +2,7 @@ package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,9 +53,22 @@ public class Deal {
         return discountPercent;
     }
 
-    public LocalDate getLastChange() {
-        return LocalDateTime.ofInstant(lastChange, ZoneId.systemDefault()).toLocalDate();
+    public LocalDate getDateLastChange() {
+        if(lastChange != null) {
+            return LocalDateTime.ofInstant(lastChange, ZoneId.systemDefault()).toLocalDate();
+        } else {
+            return null;
+        }
     }
+
+    public Duration getTimeSinceLastChange(){
+        if(lastChange != null) {
+            return Duration.between(lastChange, Instant.now());
+        } else {
+            return null;
+        }
+    }
+
 
 
     @NonNull
