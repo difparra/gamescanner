@@ -7,22 +7,18 @@ import androidx.lifecycle.ViewModel;
 
 import com.diegoparra.gamescanner.data.GamesRepository;
 import com.diegoparra.gamescanner.models.Deal;
-import com.diegoparra.gamescanner.models.Game;
+import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Store;
 import com.diegoparra.gamescanner.utils.ListUtils;
 
 import java.util.List;
-import java.util.function.Function;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.functions.BiFunction;
-import io.reactivex.rxjava3.functions.Function3;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @HiltViewModel
@@ -36,8 +32,8 @@ public class GameDetailsViewModel extends ViewModel {
     private final String dealId;
     private final String gameId;
 
-    private LiveData<Game> gameInfo;
-    private LiveData<List<DealWithStore>> dealWithStore;
+    private LiveData<DealWithGameInfo> dealWithGameInfo;
+    private LiveData<List<DealWithStore>> additionalDealsWithStoreInfo;
 
     @Inject
     public GameDetailsViewModel(GamesRepository gamesRepository, SavedStateHandle savedStateHandle) {
@@ -46,26 +42,26 @@ public class GameDetailsViewModel extends ViewModel {
         this.gameId = savedStateHandle.get(GAME_ID_SAVED_STATE_KEY);
     }
 
-    public LiveData<Game> getGame() {
-        if (gameInfo == null) {
-            gameInfo = LiveDataReactiveStreams.fromPublisher(
-                    repository.getGameInfoByDealId(dealId)
+    public LiveData<DealWithGameInfo> getDealWithGameInfo() {
+        if (dealWithGameInfo == null) {
+            dealWithGameInfo = LiveDataReactiveStreams.fromPublisher(
+                    repository.getDealById(dealId)
                             .toFlowable()
                             .subscribeOn(Schedulers.io())
             );
         }
-        return gameInfo;
+        return dealWithGameInfo;
     }
 
-    public LiveData<List<DealWithStore>> getDealWithStoreList() {
-        if (dealWithStore == null) {
-            dealWithStore = LiveDataReactiveStreams.fromPublisher(
+    public LiveData<List<DealWithStore>> getAdditionalDealsWithStoreInfo() {
+        if (additionalDealsWithStoreInfo == null) {
+            additionalDealsWithStoreInfo = LiveDataReactiveStreams.fromPublisher(
                     getDealsWithStoreObservable()
                             .toFlowable(BackpressureStrategy.LATEST)
                             .subscribeOn(Schedulers.io())
             );
         }
-        return dealWithStore;
+        return additionalDealsWithStoreInfo;
     }
 
     private Observable<List<DealWithStore>> getDealsWithStoreObservable() {

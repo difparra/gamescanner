@@ -15,7 +15,7 @@ public interface DtoMappers {
 
     Store toStore(StoreDto storeDto);
     DealWithGameInfo toDealWithGameInfo(DealsListItemDto dealsListItemDto);
-    Game toGame(DealLookupResponse dealLookupResponse);
+    DealWithGameInfo toDealWithGameInfo(DealLookupResponse dealLookupResponse, String dealId);
     List<Deal> toDealsList(GameLookupResponse gameLookupResponse, String gameId);
 
 }

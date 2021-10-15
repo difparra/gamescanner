@@ -12,7 +12,8 @@ public class GameInfoDto {
     @SerializedName("steamAppID")
     private String steamAppId;
     private float salePrice;
-    private float retailPrice;
+    @SerializedName("retailPrice")
+    private float normalPrice;
     private String steamRatingText;
     private int steamRatingPercent;
     private long steamRatingCount;
@@ -23,13 +24,13 @@ public class GameInfoDto {
     private String steamworks;
     private String thumb;
 
-    public GameInfoDto(String storeId, String gameId, String name, String steamAppId, float salePrice, float retailPrice, String steamRatingText, int steamRatingPercent, long steamRatingCount, int metacriticScore, String metacriticLink, long releaseDate, String publisher, String steamworks, String thumb) {
+    public GameInfoDto(String storeId, String gameId, String name, String steamAppId, float salePrice, float normalPrice, String steamRatingText, int steamRatingPercent, long steamRatingCount, int metacriticScore, String metacriticLink, long releaseDate, String publisher, String steamworks, String thumb) {
         this.storeId = storeId;
         this.gameId = gameId;
         this.name = name;
         this.steamAppId = steamAppId;
         this.salePrice = salePrice;
-        this.retailPrice = retailPrice;
+        this.normalPrice = normalPrice;
         this.steamRatingText = steamRatingText;
         this.steamRatingPercent = steamRatingPercent;
         this.steamRatingCount = steamRatingCount;
@@ -61,8 +62,8 @@ public class GameInfoDto {
         return salePrice;
     }
 
-    public float getRetailPrice() {
-        return retailPrice;
+    public float getNormalPrice() {
+        return normalPrice;
     }
 
     public String getSteamRatingText() {

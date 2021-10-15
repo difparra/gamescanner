@@ -58,18 +58,29 @@ public class DtoMappersImpl implements DtoMappers {
     }
 
     @Override
-    public Game toGame(DealLookupResponse dealLookupResponse) {
+    public DealWithGameInfo toDealWithGameInfo(DealLookupResponse dealLookupResponse, String dealId) {
         GameInfoDto gameInfoDto = dealLookupResponse.getGameInfo();
-        if (gameInfoDto != null) {
-            return new Game(
-                    gameInfoDto.getGameId(),
-                    gameInfoDto.getName(),
-                    gameInfoDto.getThumb(),
-                    new SteamInfo(gameInfoDto.getSteamRatingText(), gameInfoDto.getSteamRatingPercent(), gameInfoDto.getSteamRatingCount()),
-                    new MetacriticInfo(METACRITIC_URL_PREFIX + gameInfoDto.getMetacriticLink(), gameInfoDto.getMetacriticScore()),
-                    toInstantOrNull(gameInfoDto.getReleaseDate())
+        if(gameInfoDto != null) {
+            return new DealWithGameInfo(
+                    new Deal(
+                            dealId,
+                            gameInfoDto.getGameId(),
+                            gameInfoDto.getStoreId(),
+                            gameInfoDto.getNormalPrice(),
+                            gameInfoDto.getSalePrice(),
+                            (gameInfoDto.getSalePrice() * 100) / gameInfoDto.getNormalPrice(),
+                            null
+                    ),
+                    new Game(
+                            gameInfoDto.getGameId(),
+                            gameInfoDto.getName(),
+                            gameInfoDto.getThumb(),
+                            new SteamInfo(gameInfoDto.getSteamRatingText(), gameInfoDto.getSteamRatingPercent(), gameInfoDto.getSteamRatingCount()),
+                            new MetacriticInfo(METACRITIC_URL_PREFIX + gameInfoDto.getMetacriticLink(), gameInfoDto.getMetacriticScore()),
+                            toInstantOrNull(gameInfoDto.getReleaseDate())
+                    )
             );
-        } else {
+        }else{
             return null;
         }
     }

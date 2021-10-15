@@ -32,7 +32,7 @@ public class HomeViewModel extends ViewModel {
     public LiveData<Resource<List<DealWithGameInfo>>> getDealWithGameInfoList() {
         if (dealWithGameInfoList == null) {
             dealWithGameInfoList = LiveDataReactiveStreams.fromPublisher(
-                    repository.getDealsWithGameInfo()
+                    repository.getDeals()
                             .map(Resource::Success)
                             .toFlowable()
                             .startWithItem(Resource.Loading())

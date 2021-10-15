@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentGameDetailsBinding;
+import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.models.MetacriticInfo;
 import com.diegoparra.gamescanner.models.SteamInfo;
@@ -66,9 +66,10 @@ public class GameDetailsFragment extends Fragment {
     }
 
     private void subscribeObservers() {
-        viewModel.getGame().observe(getViewLifecycleOwner(), new Observer<Game>() {
+        viewModel.getDealWithGameInfo().observe(getViewLifecycleOwner(), new Observer<DealWithGameInfo>() {
             @Override
-            public void onChanged(Game game) {
+            public void onChanged(DealWithGameInfo dealWithGameInfo) {
+                Game game = dealWithGameInfo.getGame();
                 binding.toolbar.setTitle(game.getTitle());
                 binding.title.setText(game.getTitle());
                 loadImage(game.getImageUrl());
@@ -116,7 +117,7 @@ public class GameDetailsFragment extends Fragment {
             }
 
         });
-        viewModel.getDealWithStoreList().observe(getViewLifecycleOwner(), new Observer<List<DealWithStore>>() {
+        viewModel.getAdditionalDealsWithStoreInfo().observe(getViewLifecycleOwner(), new Observer<List<DealWithStore>>() {
             @Override
             public void onChanged(List<DealWithStore> dealWithStores) {
                 adapter.submitList(dealWithStores);

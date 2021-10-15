@@ -8,7 +8,6 @@ import com.diegoparra.gamescanner.data.network.dtos.GameLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.StoreDto;
 import com.diegoparra.gamescanner.models.Deal;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
-import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.models.Store;
 import com.diegoparra.gamescanner.utils.ListUtils;
 
@@ -22,8 +21,8 @@ import timber.log.Timber;
 
 public class GamesRepositoryImpl implements GamesRepository {
 
-    private GamesApi api;
-    private DtoMappers dtoMappers;
+    private final GamesApi api;
+    private final DtoMappers dtoMappers;
 
     @Inject
     public GamesRepositoryImpl(GamesApi api, DtoMappers dtoMappers) {
@@ -45,34 +44,47 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Single<List<DealWithGameInfo>> getDealsWithGameInfo() {
-        Timber.i("getDealsWithGameInfo called!");
-        return api.getDealsWithGameInfo().map(new Function<List<DealsListItemDto>, List<DealWithGameInfo>>() {
+    public Single<List<DealWithGameInfo>> getDeals() {
+        Timber.i("getDeals called!");
+        return api.getDeals().map(new Function<List<DealsListItemDto>, List<DealWithGameInfo>>() {
             @Override
             public List<DealWithGameInfo> apply(List<DealsListItemDto> dealsListItemDtos) throws Throwable {
-                List<DealWithGameInfo> dealWithGameInfos = ListUtils.map(dealsListItemDtos, dtoMappers::toDealWithGameInfo);
-                Timber.d("getDealsWithGameInfo result: \n dealWithGameInfo={" + ListUtils.joinToString(dealWithGameInfos, "\n") + "}");
-                return dealWithGameInfos;
+                List<DealWithGameInfo> dealWithGameInfoList = ListUtils.map(dealsListItemDtos, dtoMappers::toDealWithGameInfo);
+                Timber.d("getDeals result: \n dealWithGameInfo={" + ListUtils.joinToString(dealWithGameInfoList, "\n") + "}");
+                return dealWithGameInfoList;
             }
         });
     }
 
     @Override
-    public Single<Game> getGameInfoByDealId(String dealId) {
-        Timber.i("getGameInfoByDealId called!");
-        return api.getDealWithGameInfo(dealId).map(new Function<DealLookupResponse, Game>() {
+    public Single<List<DealWithGameInfo>> getDealsByGameTitle(String title) {
+        Timber.i("getDealsByGameTitle called! with title=%s", title);
+        return api.getDealsByTitle(title).map(new Function<List<DealsListItemDto>, List<DealWithGameInfo>>() {
             @Override
-            public Game apply(DealLookupResponse dealLookupResponse) throws Throwable {
-                Game game = dtoMappers.toGame(dealLookupResponse);
-                Timber.d("getGameInfoByDealId result: \n game=" + game);
-                return game;
+            public List<DealWithGameInfo> apply(List<DealsListItemDto> dealsListItemDtos) throws Throwable {
+                List<DealWithGameInfo> dealWithGameInfoList = ListUtils.map(dealsListItemDtos, dtoMappers::toDealWithGameInfo);
+                Timber.d("getDealsByGameTitle result: \n dealWithGameInfo={" + ListUtils.joinToString(dealWithGameInfoList, "\n") + "}");
+                return dealWithGameInfoList;
+            }
+        });
+    }
+
+    @Override
+    public Single<DealWithGameInfo> getDealById(String dealId) {
+        Timber.i("getDealById called! with dealId=%s", dealId);
+        return api.getDealById(dealId).map(new Function<DealLookupResponse, DealWithGameInfo>() {
+            @Override
+            public DealWithGameInfo apply(DealLookupResponse dealLookupResponse) throws Throwable {
+                DealWithGameInfo dealWithGameInfo = dtoMappers.toDealWithGameInfo(dealLookupResponse, dealId);
+                Timber.d("getDealById result: dealWithGameInfo=%s", dealWithGameInfo);
+                return dealWithGameInfo;
             }
         });
     }
 
     @Override
     public Single<List<Deal>> getDealsForGame(String gameId) {
-        Timber.i("getDealsForGame called!");
+        Timber.i("getDealsForGame called! with gameId=%s", gameId);
         return api.getDealsForGame(gameId).map(new Function<GameLookupResponse, List<Deal>>() {
             @Override
             public List<Deal> apply(GameLookupResponse gameLookupResponse) throws Throwable {

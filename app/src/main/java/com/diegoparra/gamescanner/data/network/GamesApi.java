@@ -20,10 +20,13 @@ public interface GamesApi {
     Single<List<StoreDto>> getStores();
 
     @GET("deals")
-    Single<List<DealsListItemDto>> getDealsWithGameInfo();
+    Single<List<DealsListItemDto>> getDeals();
 
     @GET("deals")
-    Single<DealLookupResponse> getDealWithGameInfo(@Query(value = "id", encoded = true) String dealId);
+    Single<List<DealsListItemDto>> getDealsByTitle(@Query("title") String title);
+
+    @GET("deals")
+    Single<DealLookupResponse> getDealById(@Query(value = "id", encoded = true) String dealId);
     //  Must use encoded true, as dealId may contain special characters as % and I don't want to change them in the URL by encoding
 
     @GET("games")
