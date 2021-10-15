@@ -18,4 +18,9 @@
         <item quantity="other">%d minutes ago</item>
     </plurals>
 
+
+    <string name="game_details_deals_title">Deals / Stores</string>
+    <string name="steam_score_info">Steam score: %1$s • %2$s</string>
+    <string name="metacritic_score_info">Metacritic score: %s</string>
+
 </resources>

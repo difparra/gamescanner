@@ -1,14 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.game_details.GameDetailsFragment">
 
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:navigationIcon="@drawable/ic_arrow_back"
+            tools:title="Nickelodeon All-Star Brawl" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        tools:text="Fragment game details" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_standard"
+                    android:adjustViewBounds="true"
+                    tools:src="@drawable/ic_launcher_foreground" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/padding_big"
+                    android:layout_marginEnd="@dimen/padding_standard"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_small"
+                        tools:text="Nickelodeon All-Star Brawl" />
+
+                    <TextView
+                        android:id="@+id/release_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_small"
+                        tools:text="Released on: Oct 4, 2021" />
+
+                    <TextView
+                        android:id="@+id/steam_score"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_small"
+                        android:drawablePadding="@dimen/padding_standard"
+                        android:gravity="center_vertical"
+                        app:drawableStartCompat="@drawable/ic_steam"
+                        tools:text="Steam score: 85% • Very positive" />
+
+                    <TextView
+                        android:id="@+id/metacritic_score"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_small"
+                        android:drawablePadding="@dimen/padding_standard"
+                        android:gravity="center_vertical"
+                        app:drawableStartCompat="@drawable/ic_metacritic"
+                        tools:text="Metacritic score: 93%" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_standard"
+                android:layout_marginVertical="@dimen/padding_standard"
+                android:background="?attr/colorControlHighlight" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_standard"
+                android:text="@string/game_details_deals_title"
+                android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/deals_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="@dimen/padding_standard"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="@integer/game_details_deals_columns"
+                tools:itemCount="10"
+                tools:listitem="@layout/list_item_deal_detail" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

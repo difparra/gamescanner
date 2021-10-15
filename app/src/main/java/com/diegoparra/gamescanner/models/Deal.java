@@ -53,6 +53,10 @@ public class Deal {
         return discountPercent;
     }
 
+    public boolean isOnSale() {
+        return discountPercent > 0.1;
+    }
+
     public LocalDate getDateLastChange() {
         if(lastChange != null) {
             return LocalDateTime.ofInstant(lastChange, ZoneId.systemDefault()).toLocalDate();

@@ -5,6 +5,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.diegoparra.gamescanner.R;
-import com.diegoparra.gamescanner.databinding.ListItemDealHomeBinding;
+import com.diegoparra.gamescanner.databinding.ListItemDealWithGameInfoHomeBinding;
 import com.diegoparra.gamescanner.models.Deal;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Game;
@@ -27,16 +28,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-public class DealsAdapter extends ListAdapter<DealWithGameInfo, DealsAdapter.ViewHolder> {
+public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealWithGameInfoAdapter.ViewHolder> {
 
-    protected DealsAdapter() {
+    private final OnItemClickListener listener;
+
+    protected DealWithGameInfoAdapter(OnItemClickListener listener) {
         super(diffCallback);
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return ViewHolder.create(parent);
+        return ViewHolder.create(parent, listener);
     }
 
     @Override
@@ -44,16 +48,30 @@ public class DealsAdapter extends ListAdapter<DealWithGameInfo, DealsAdapter.Vie
         holder.bind(getItem(position));
     }
 
+    interface OnItemClickListener {
+        void onItemClick(String dealId, String gameId);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemDealHomeBinding binding;
+        private final ListItemDealWithGameInfoHomeBinding binding;
+        private DealWithGameInfo dealWithGameInfo;
 
-        public ViewHolder(ListItemDealHomeBinding binding) {
+        public ViewHolder(ListItemDealWithGameInfoHomeBinding binding, OnItemClickListener listener) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (dealWithGameInfo != null) {
+                        listener.onItemClick(dealWithGameInfo.getDeal().getDealId(), dealWithGameInfo.getGame().getGameId());
+                    }
+                }
+            });
         }
 
         public void bind(DealWithGameInfo dealWithGameInfo) {
+            this.dealWithGameInfo = dealWithGameInfo;
             Deal dealInfo = dealWithGameInfo.getDeal();
             Game gameInfo = dealWithGameInfo.getGame();
             binding.title.setText(gameInfo.getTitle());
@@ -118,9 +136,9 @@ public class DealsAdapter extends ListAdapter<DealWithGameInfo, DealsAdapter.Vie
         }
 
 
-        static ViewHolder create(ViewGroup parent) {
+        static ViewHolder create(ViewGroup parent, OnItemClickListener listener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new ViewHolder(ListItemDealHomeBinding.inflate(inflater, parent, false));
+            return new ViewHolder(ListItemDealWithGameInfoHomeBinding.inflate(inflater, parent, false), listener);
         }
 
     }

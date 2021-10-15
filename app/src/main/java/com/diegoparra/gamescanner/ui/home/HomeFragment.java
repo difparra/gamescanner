@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.diegoparra.gamescanner.databinding.FragmentHomeBinding;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.utils.EventObserver;
 import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
@@ -23,13 +26,14 @@ import java.util.List;
 import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import kotlin.Pair;
 
 @AndroidEntryPoint
 public class HomeFragment extends Fragment {
 
     private HomeViewModel viewModel;
     private FragmentHomeBinding binding;
-    private DealsAdapter adapter;
+    private DealWithGameInfoAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +50,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        adapter = new DealsAdapter();
+        adapter = new DealWithGameInfoAdapter((dealId, gameId) -> viewModel.navigateDetails(dealId, gameId));
         binding.dealsList.setHasFixedSize(true);
         binding.dealsList.setAdapter(adapter);
         binding.dealsList.addItemDecoration(new DividerItemDecoration(binding.dealsList.getContext(), DividerItemDecoration.VERTICAL));
@@ -63,7 +67,8 @@ public class HomeFragment extends Fragment {
                 ViewUtils.isVisible(binding.errorMessage, listResource.getStatus() == Resource.Status.ERROR);
 
                 switch (listResource.getStatus()) {
-                    case LOADING: break;
+                    case LOADING:
+                        break;
                     case SUCCESS: {
                         List<DealWithGameInfo> data = listResource.getData();
                         adapter.submitList(data);
@@ -79,6 +84,10 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+        viewModel.getNavigateDetails().observe(getViewLifecycleOwner(), new EventObserver<>(navigateDetailsData -> {
+            NavDirections navDirections = HomeFragmentDirections.actionGlobalGameDetailsFragment(navigateDetailsData.getDealId(), navigateDetailsData.getGameId());
+            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
+        }));
     }
 
     @Override
