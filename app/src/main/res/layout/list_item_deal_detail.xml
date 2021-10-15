@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_small"
     app:cardCornerRadius="@dimen/padding_standard"
     app:cardUseCompatPadding="true"
     app:contentPadding="@dimen/padding_standard">
@@ -17,7 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginVertical="40dp"
+            android:paddingVertical="@dimen/padding_big"
+            android:layout_marginVertical="@dimen/padding_big"
+            android:layout_centerHorizontal="true"
+            android:background="?attr/colorControlHighlight"
             tools:src="@drawable/ic_launcher_foreground" />
 
         <TextView

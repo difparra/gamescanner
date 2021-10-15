@@ -17,7 +17,12 @@ import java.util.function.Function;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.reactivex.rxjava3.core.BackpressureStrategy;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.functions.BiFunction;
+import io.reactivex.rxjava3.functions.Function3;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @HiltViewModel
@@ -55,25 +60,29 @@ public class GameDetailsViewModel extends ViewModel {
     public LiveData<List<DealWithStore>> getDealWithStoreList() {
         if (dealWithStore == null) {
             dealWithStore = LiveDataReactiveStreams.fromPublisher(
-                    repository.getDealsForGame(gameId)
-                            .zipWith(repository.getStores(), new BiFunction<List<Deal>, List<Store>, List<DealWithStore>>() {
-                                @Override
-                                public List<DealWithStore> apply(List<Deal> deals, List<Store> stores) throws Throwable {
-                                    return ListUtils.map(deals, new Function<Deal, DealWithStore>() {
-                                        @Override
-                                        public DealWithStore apply(Deal deal) {
-                                            String storeId = deal.getStoreId();
-                                            Store store = ListUtils.find(stores, store1 -> store1.getId().equals(storeId));
-                                            return new DealWithStore(deal, store);
-                                        }
-                                    });
-                                }
-                            })
-                            .toFlowable()
+                    getDealsWithStoreObservable()
+                            .toFlowable(BackpressureStrategy.LATEST)
                             .subscribeOn(Schedulers.io())
             );
         }
         return dealWithStore;
     }
+
+    private Observable<List<DealWithStore>> getDealsWithStoreObservable() {
+        return Observable.combineLatest(
+                repository.getDealsForGame(gameId).subscribeOn(Schedulers.io()).toObservable(),
+                repository.getStores().subscribeOn(Schedulers.io()).toObservable(),
+                new BiFunction<List<Deal>, List<Store>, List<DealWithStore>>() {
+                    @Override
+                    public List<DealWithStore> apply(List<Deal> deals, List<Store> stores) throws Throwable {
+                        return ListUtils.map(deals, deal -> {
+                            String storeId = deal.getStoreId();
+                            Store store = ListUtils.find(stores, store1 -> store1.getId().equals(storeId));
+                            return new DealWithStore(deal, store);
+                        });
+                    }
+                });
+    }
+
 
 }

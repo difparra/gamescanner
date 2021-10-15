@@ -10,11 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:navigationIcon="@drawable/ic_arrow_back"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+            app:navigationIcon="@drawable/ic_arrow_back"
             tools:title="Nickelodeon All-Star Brawl" />
 
     </com.google.android.material.appbar.AppBarLayout>
