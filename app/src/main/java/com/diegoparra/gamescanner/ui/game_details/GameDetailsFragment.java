@@ -7,8 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -21,6 +19,7 @@ import com.diegoparra.gamescanner.databinding.FragmentGameDetailsBinding;
 import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.models.MetacriticInfo;
 import com.diegoparra.gamescanner.models.SteamInfo;
+import com.diegoparra.gamescanner.utils.NavigationUtils;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
 import java.time.LocalDate;
@@ -52,11 +51,18 @@ public class GameDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        binding.toolbar.setNavigationOnClickListener(view1 -> NavHostFragment.findNavController(GameDetailsFragment.this).navigateUp());
+        setUpToolbar();
+        setUpDealsList();
+        subscribeObservers();
+    }
+
+    private void setUpToolbar() {
+        NavigationUtils.setupToolbar(binding.toolbar);
+    }
+
+    private void setUpDealsList() {
         adapter = new DealWithStoreAdapter();
         binding.dealsList.setAdapter(adapter);
-
-        subscribeObservers();
     }
 
     private void subscribeObservers() {

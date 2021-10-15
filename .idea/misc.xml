@@ -11,8 +11,8 @@
         <entry key="app/src/main/res/drawable/loading_img.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/fragment_game_details.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.2578125" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.22" />
         <entry key="app/src/main/res/layout/list_item_deal_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout/list_item_deal_detail_with_discount.xml" value="0.2578125" />
         <entry key="app/src/main/res/layout/list_item_deal_detail_without_discount.xml" value="0.2578125" />
@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/layout/list_item_deal_home.xml" value="0.33" />
         <entry key="app/src/main/res/layout/list_item_deal_no_discount_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout/list_item_deal_with_game_info_home.xml" value="0.2578125" />
+        <entry key="app/src/main/res/menu/menu_home.xml" value="0.2578125" />
       </map>
     </option>
   </component>

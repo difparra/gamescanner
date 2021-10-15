@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">GameScanner</string>
 
+    <string name="home">Home</string>
+    <string name="game_details">Game details</string>
+    <string name="search">Search</string>
+
     <string name="release_date">Released on: %s</string>
 
     <plurals name="updated_days_ago">
@@ -18,9 +22,10 @@
         <item quantity="other">%d minutes ago</item>
     </plurals>
 
-
     <string name="game_details_deals_title">Deals / Stores</string>
     <string name="steam_score_info">Steam score: %1$s • %2$s</string>
     <string name="metacritic_score_info">Metacritic score: %s</string>
+
+    <string name="navigate_up">Navigate up</string>
 
 </resources>

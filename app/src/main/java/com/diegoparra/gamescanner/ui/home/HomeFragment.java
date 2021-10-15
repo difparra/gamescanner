@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,12 +13,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentHomeBinding;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.utils.EventObserver;
+import com.diegoparra.gamescanner.utils.NavigationUtils;
 import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
@@ -26,7 +30,6 @@ import java.util.List;
 import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import kotlin.Pair;
 
 @AndroidEntryPoint
 public class HomeFragment extends Fragment {
@@ -50,12 +53,31 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setupToolbar();
+        setupDealsList();
+        subscribeObservers();
+    }
+
+
+    private void setupToolbar() {
+        NavigationUtils.setupToolbar(binding.toolbar);
+        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.menu_item_search) {
+                    NavDirections navDirections = HomeFragmentDirections.actionHomeFragmentToSearchFragment();
+                    NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
+                }
+                return true;
+            }
+        });
+    }
+
+    private void setupDealsList() {
         adapter = new DealWithGameInfoAdapter((dealId, gameId) -> viewModel.navigateDetails(dealId, gameId));
         binding.dealsList.setHasFixedSize(true);
         binding.dealsList.setAdapter(adapter);
         binding.dealsList.addItemDecoration(new DividerItemDecoration(binding.dealsList.getContext(), DividerItemDecoration.VERTICAL));
-
-        subscribeObservers();
     }
 
     private void subscribeObservers() {
