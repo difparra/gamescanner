@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.diegoparra.gamescanner.R;
-import com.diegoparra.gamescanner.databinding.ListItemDealDetailBinding;
+import com.diegoparra.gamescanner.databinding.ListItemDetailAdditionalDealBinding;
 import com.diegoparra.gamescanner.models.Deal;
+import com.diegoparra.gamescanner.utils.ImageUtils;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
 import java.text.NumberFormat;
@@ -39,9 +38,9 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemDealDetailBinding binding;
+        private final ListItemDetailAdditionalDealBinding binding;
 
-        public ViewHolder(ListItemDealDetailBinding binding) {
+        public ViewHolder(ListItemDetailAdditionalDealBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -54,11 +53,7 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
         }
 
         private void loadImage(String imageUrl) {
-            Glide.with(binding.storeLogo.getContext())
-                    .load(imageUrl)
-                    .placeholder(R.drawable.loading_animation)
-                    .error(R.drawable.ic_broken_image)
-                    .into(binding.storeLogo);
+            ImageUtils.loadImageWithPlaceholderAndError(binding.storeLogo, imageUrl);
         }
 
         private void loadDiscount(boolean isOnSale, float discount) {
@@ -68,13 +63,13 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
         }
 
         private void loadPrice(boolean isOnSale, float normalPrice, float salePrice) {
-            if(isOnSale) {
+            if (isOnSale) {
                 String normalPriceStr = NumberFormat.getCurrencyInstance(Locale.US).format(normalPrice);
                 String salePriceStr = NumberFormat.getCurrencyInstance(Locale.US).format(salePrice);
                 SpannableString spannableString = new SpannableString(normalPriceStr + " " + salePriceStr);
                 spannableString.setSpan(new StrikethroughSpan(), 0, normalPriceStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 binding.price.setText(spannableString);
-            }else {
+            } else {
                 String priceStr = NumberFormat.getCurrencyInstance(Locale.US).format(normalPrice);
                 binding.price.setText(priceStr);
             }
@@ -82,7 +77,7 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
 
         static ViewHolder create(ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new ViewHolder(ListItemDealDetailBinding.inflate(inflater, parent, false));
+            return new ViewHolder(ListItemDetailAdditionalDealBinding.inflate(inflater, parent, false));
         }
     }
 

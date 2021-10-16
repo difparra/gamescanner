@@ -25,7 +25,8 @@
     </plurals>
 
     <!--    Details screen  -->
-    <string name="game_details_deals_title">Deals / Stores</string>
+    <string name="deal_details_selected_store">Selected deal</string>
+    <string name="deal_details_additional_deals_title">Additional deals / stores</string>
     <string name="steam_score_info">Steam score: %1$s • %2$s</string>
     <string name="metacritic_score_info">Metacritic score: %s</string>
 

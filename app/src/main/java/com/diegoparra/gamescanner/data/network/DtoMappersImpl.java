@@ -43,7 +43,6 @@ public class DtoMappersImpl implements DtoMappers {
                         dealsListItemDto.getStoreId(),
                         dealsListItemDto.getNormalPrice(),
                         dealsListItemDto.getSalePrice(),
-                        dealsListItemDto.getDiscountPercent(),
                         toInstantOrNull(dealsListItemDto.getLastChange())
                 ),
                 new Game(
@@ -68,7 +67,6 @@ public class DtoMappersImpl implements DtoMappers {
                             gameInfoDto.getStoreId(),
                             gameInfoDto.getNormalPrice(),
                             gameInfoDto.getSalePrice(),
-                            (gameInfoDto.getSalePrice() * 100) / gameInfoDto.getNormalPrice(),
                             null
                     ),
                     new Game(
@@ -98,7 +96,6 @@ public class DtoMappersImpl implements DtoMappers {
                 dealDto.getStoreId(),
                 dealDto.getNormalPrice(),
                 dealDto.getSalePrice(),
-                dealDto.getDiscountPercent(),
                 null
         );
     }

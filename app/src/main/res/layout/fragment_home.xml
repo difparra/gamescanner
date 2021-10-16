@@ -29,7 +29,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:itemCount="10"
-        tools:listitem="@layout/list_item_deal_with_game_info_home" />
+        tools:listitem="@layout/list_item_home_deal" />
 
     <ProgressBar
         android:id="@+id/progress_circular"

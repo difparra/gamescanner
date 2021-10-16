@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/padding_small"
     app:cardCornerRadius="@dimen/padding_standard"
@@ -10,12 +10,12 @@
     app:contentPadding="@dimen/padding_standard">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/store_logo"
-            android:layout_width="match_parent"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:paddingVertical="@dimen/padding_big"
@@ -28,13 +28,13 @@
             android:id="@+id/discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@id/store_logo"
             android:layout_gravity="center_horizontal"
             android:background="?attr/colorPrimary"
             android:padding="@dimen/padding_small"
             android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textColor="?attr/colorOnPrimary"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             tools:text="-93%" />
 
         <TextView

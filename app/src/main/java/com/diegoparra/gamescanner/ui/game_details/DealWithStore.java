@@ -8,11 +8,14 @@ import java.util.Objects;
 /**
  * This class is intended just as a wrapper to pass data to the DealsAdapter.
  * It will be used just in viewModel and ui. Neither models nor data layers will know about it.
+ *
+ * It is just used in viewModel and ui layer, and may be considered as a dto in clean architecture,
+ * just holding data and passing, without additional methods.
  */
 public class DealWithStore {
 
-    private Deal deal;
-    private Store store;
+    private final Deal deal;
+    private final Store store;
 
     public DealWithStore(Deal deal, Store store) {
         this.deal = deal;

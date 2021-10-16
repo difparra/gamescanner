@@ -105,7 +105,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void setupSearchResultsList() {
-        adapter = new DealWithGameInfoAdapter((dealId, gameId) -> viewModel.navigateDetails(dealId, gameId));
+        adapter = new DealWithGameInfoAdapter(dealId -> viewModel.navigateDetails(dealId));
         binding.searchResults.setHasFixedSize(true);
         binding.searchResults.setAdapter(adapter);
         binding.searchResults.addItemDecoration(new DividerItemDecoration(binding.searchResults.getContext(), DividerItemDecoration.VERTICAL));
@@ -142,8 +142,8 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
-        viewModel.getNavigateDetails().observe(getViewLifecycleOwner(), new EventObserver<>(navigateDetailsData -> {
-            NavDirections navDirections = HomeFragmentDirections.actionGlobalGameDetailsFragment(navigateDetailsData.getDealId(), navigateDetailsData.getGameId());
+        viewModel.getNavigateDetails().observe(getViewLifecycleOwner(), new EventObserver<>(dealId -> {
+            NavDirections navDirections = HomeFragmentDirections.actionGlobalGameDetailsFragment(dealId);
             NavHostFragment.findNavController(SearchFragment.this).navigate(navDirections);
         }));
     }

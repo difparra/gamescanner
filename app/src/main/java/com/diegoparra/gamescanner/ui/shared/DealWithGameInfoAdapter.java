@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.diegoparra.gamescanner.R;
-import com.diegoparra.gamescanner.databinding.ListItemDealWithGameInfoHomeBinding;
+import com.diegoparra.gamescanner.databinding.ListItemHomeDealBinding;
 import com.diegoparra.gamescanner.models.Deal;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Game;
+import com.diegoparra.gamescanner.utils.ImageUtils;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
 import java.text.NumberFormat;
@@ -49,22 +49,22 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String dealId, String gameId);
+        void onItemClick(String dealId);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemDealWithGameInfoHomeBinding binding;
+        private final ListItemHomeDealBinding binding;
         private DealWithGameInfo dealWithGameInfo;
 
-        public ViewHolder(ListItemDealWithGameInfoHomeBinding binding, OnItemClickListener listener) {
+        public ViewHolder(ListItemHomeDealBinding binding, OnItemClickListener listener) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (dealWithGameInfo != null) {
-                        listener.onItemClick(dealWithGameInfo.getDeal().getDealId(), dealWithGameInfo.getGame().getGameId());
+                        listener.onItemClick(dealWithGameInfo.getDeal().getDealId());
                     }
                 }
             });
@@ -82,11 +82,7 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
         }
 
         private void loadImage(String imageUrl) {
-            Glide.with(binding.image)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.loading_animation)
-                    .error(R.drawable.ic_broken_image)
-                    .into(binding.image);
+            ImageUtils.loadImageWithPlaceholderAndError(binding.image, imageUrl);
         }
 
         private void loadReleaseDate(LocalDate releaseDate) {
@@ -138,7 +134,7 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
 
         static ViewHolder create(ViewGroup parent, OnItemClickListener listener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new ViewHolder(ListItemDealWithGameInfoHomeBinding.inflate(inflater, parent, false), listener);
+            return new ViewHolder(ListItemHomeDealBinding.inflate(inflater, parent, false), listener);
         }
 
     }

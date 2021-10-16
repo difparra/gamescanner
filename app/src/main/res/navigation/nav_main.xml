@@ -16,13 +16,10 @@
     </fragment>
     <fragment
         android:id="@+id/gameDetailsFragment"
-        android:name="com.diegoparra.gamescanner.ui.game_details.GameDetailsFragment"
-        tools:layout="@layout/fragment_game_details">
+        android:name="com.diegoparra.gamescanner.ui.game_details.DealDetailsFragment"
+        tools:layout="@layout/fragment_deal_details">
         <argument
             android:name="deal_id"
-            app:argType="string" />
-        <argument
-            android:name="game_id"
             app:argType="string" />
     </fragment>
     <fragment
