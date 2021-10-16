@@ -5,28 +5,42 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentSearchBinding;
-import com.diegoparra.gamescanner.utils.NavigationUtils;
+import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.ui.home.HomeFragmentDirections;
+import com.diegoparra.gamescanner.ui.shared.DealWithGameInfoAdapter;
+import com.diegoparra.gamescanner.utils.EventObserver;
+import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.SystemUtils;
+import com.diegoparra.gamescanner.utils.ViewUtils;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
 
 @AndroidEntryPoint
 public class SearchFragment extends Fragment {
 
     private SearchViewModel viewModel;
     private FragmentSearchBinding binding;
+    private DealWithGameInfoAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +58,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setupToolbar();
+        setupSearchResultsList();
         subscribeObservers();
     }
 
@@ -62,8 +77,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                //  TODO
-                return false;
+                viewModel.setQuery(s);
+                return true;
             }
         });
         binding.searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -74,10 +89,63 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+        binding.searchResults.setFocusable(true);
+        binding.searchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                binding.searchResults.requestFocus();
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
+
+    private void setupSearchResultsList() {
+        adapter = new DealWithGameInfoAdapter((dealId, gameId) -> viewModel.navigateDetails(dealId, gameId));
+        binding.searchResults.setHasFixedSize(true);
+        binding.searchResults.setAdapter(adapter);
+        binding.searchResults.addItemDecoration(new DividerItemDecoration(binding.searchResults.getContext(), DividerItemDecoration.VERTICAL));
     }
 
     private void subscribeObservers() {
+        viewModel.getResults().observe(getViewLifecycleOwner(), new Observer<Resource<List<DealWithGameInfo>>>() {
+            @Override
+            public void onChanged(Resource<List<DealWithGameInfo>> listResource) {
+                Timber.i("onChanged getResults called! - listResource = %s", listResource);
+                ViewUtils.isVisible(binding.progressCircular, listResource.getStatus() == Resource.Status.LOADING);
+                ViewUtils.isVisible(binding.searchResults, listResource.getStatus() == Resource.Status.SUCCESS);
+                ViewUtils.isVisible(binding.message, listResource.getStatus() == Resource.Status.ERROR);
 
+                switch (listResource.getStatus()) {
+                    case LOADING:
+                        break;
+                    case SUCCESS: {
+                        List<DealWithGameInfo> data = listResource.getData();
+                        adapter.submitList(data);
+                        if(data != null && data.isEmpty()) {
+                            binding.message.setText(R.string.no_search_results_found);
+                            ViewUtils.isVisible(binding.message, true);
+                        }
+                        break;
+                    }
+                    case ERROR: {
+                        adapter.submitList(Collections.emptyList());
+                        Throwable error = listResource.getError();
+                        Objects.requireNonNull(error);
+                        binding.message.setText(error.getMessage());
+                        break;
+                    }
+                }
+            }
+        });
+        viewModel.getNavigateDetails().observe(getViewLifecycleOwner(), new EventObserver<>(navigateDetailsData -> {
+            NavDirections navDirections = HomeFragmentDirections.actionGlobalGameDetailsFragment(navigateDetailsData.getDealId(), navigateDetailsData.getGameId());
+            NavHostFragment.findNavController(SearchFragment.this).navigate(navDirections);
+        }));
     }
 
     @Override
@@ -85,4 +153,5 @@ public class SearchFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }

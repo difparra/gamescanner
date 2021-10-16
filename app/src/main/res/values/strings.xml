@@ -4,6 +4,8 @@
     <string name="home">Home</string>
     <string name="game_details">Game details</string>
     <string name="search">Search</string>
+    <string name="navigate_up">Navigate up</string>
+
 
     <string name="release_date">Released on: %s</string>
 
@@ -22,10 +24,13 @@
         <item quantity="other">%d minutes ago</item>
     </plurals>
 
+    <!--    Details screen  -->
     <string name="game_details_deals_title">Deals / Stores</string>
     <string name="steam_score_info">Steam score: %1$s • %2$s</string>
     <string name="metacritic_score_info">Metacritic score: %s</string>
 
-    <string name="navigate_up">Navigate up</string>
+    <!--    States and errors   -->
+    <string name="no_search_results_found">No results were found. Try with another query.</string>
+
 
 </resources>

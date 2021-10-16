@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.diegoparra.gamescanner.data.GamesRepository;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.ui.shared.NavigateDetailsData;
 import com.diegoparra.gamescanner.utils.Event;
 import com.diegoparra.gamescanner.utils.Resource;
 
@@ -52,22 +53,4 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-
-    static class NavigateDetailsData {
-        private final String dealId;
-        private final String gameId;
-
-        public NavigateDetailsData(String dealId, String gameId) {
-            this.dealId = dealId;
-            this.gameId = gameId;
-        }
-
-        public String getDealId() {
-            return dealId;
-        }
-
-        public String getGameId() {
-            return gameId;
-        }
-    }
 }

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentHomeBinding;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.ui.shared.DealWithGameInfoAdapter;
 import com.diegoparra.gamescanner.utils.EventObserver;
 import com.diegoparra.gamescanner.utils.NavigationUtils;
 import com.diegoparra.gamescanner.utils.Resource;

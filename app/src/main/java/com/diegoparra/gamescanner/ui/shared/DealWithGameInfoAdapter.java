@@ -1,4 +1,4 @@
-package com.diegoparra.gamescanner.ui.home;
+package com.diegoparra.gamescanner.ui.shared;
 
 import android.content.res.Resources;
 import android.text.SpannableString;
@@ -32,7 +32,7 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
 
     private final OnItemClickListener listener;
 
-    protected DealWithGameInfoAdapter(OnItemClickListener listener) {
+    public DealWithGameInfoAdapter(OnItemClickListener listener) {
         super(diffCallback);
         this.listener = listener;
     }
@@ -48,7 +48,7 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
         holder.bind(getItem(position));
     }
 
-    interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(String dealId, String gameId);
     }
 
