@@ -1,6 +1,7 @@
 package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,14 +17,18 @@ public class Game {
     private SteamInfo steamInfo;
     private MetacriticInfo metacriticInfo;
     private Instant releaseDate;
+    private String cheapestDealId;
+    private Float cheapestCurrentPrice;
 
-    public Game(String gameId, String title, String imageUrl, SteamInfo steamInfo, MetacriticInfo metacriticInfo, Instant releaseDate) {
+    public Game(String gameId, String title, String imageUrl, SteamInfo steamInfo, MetacriticInfo metacriticInfo, Instant releaseDate, String cheapestDealId, Float cheapestCurrentPrice) {
         this.gameId = gameId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.steamInfo = steamInfo;
         this.metacriticInfo = metacriticInfo;
         this.releaseDate = releaseDate;
+        this.cheapestDealId = cheapestDealId;
+        this.cheapestCurrentPrice = cheapestCurrentPrice;
     }
 
     public String getGameId() {
@@ -47,11 +52,21 @@ public class Game {
     }
 
     public LocalDate getReleaseDate() {
-        if(releaseDate != null && releaseDate.getEpochSecond() > 0) {
+        if (releaseDate != null && releaseDate.getEpochSecond() > 0) {
             return LocalDateTime.ofInstant(releaseDate, ZoneId.systemDefault()).toLocalDate();
-        }else {
+        } else {
             return null;
         }
+    }
+
+    @Nullable
+    public String getCheapestDealId() {
+        return cheapestDealId;
+    }
+
+    @Nullable
+    public Float getCheapestCurrentPrice() {
+        return cheapestCurrentPrice;
     }
 
     @NonNull

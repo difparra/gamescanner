@@ -17,14 +17,16 @@ public class Deal {
     private float normalPrice;
     private float salePrice;
     private Instant lastChange;
+    private String goToDealLink;
 
-    public Deal(String dealId, String gameId, String storeId, float normalPrice, float salePrice, Instant lastChange) {
+    public Deal(String dealId, String gameId, String storeId, float normalPrice, float salePrice, Instant lastChange, String goToDealLink) {
         this.dealId = dealId;
         this.gameId = gameId;
         this.storeId = storeId;
         this.normalPrice = normalPrice;
         this.salePrice = salePrice;
         this.lastChange = lastChange;
+        this.goToDealLink = goToDealLink;
     }
 
     public String getDealId() {
@@ -71,7 +73,9 @@ public class Deal {
         }
     }
 
-
+    public String getGoToDealLink() {
+        return goToDealLink;
+    }
 
     @NonNull
     @Override
@@ -82,8 +86,8 @@ public class Deal {
                 ", storeId='" + storeId + '\'' +
                 ", normalPrice=" + normalPrice +
                 ", salePrice=" + salePrice +
-                ", discountPercent=" + getDiscountPercent() +
                 ", lastChange=" + lastChange +
+                ", goToDealLik='" + goToDealLink + '\'' +
                 '}';
     }
 
@@ -92,11 +96,11 @@ public class Deal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Deal deal = (Deal) o;
-        return Float.compare(deal.normalPrice, normalPrice) == 0 && Float.compare(deal.salePrice, salePrice) == 0 && dealId.equals(deal.dealId) && gameId.equals(deal.gameId) && storeId.equals(deal.storeId) && Objects.equals(lastChange, deal.lastChange);
+        return Float.compare(deal.normalPrice, normalPrice) == 0 && Float.compare(deal.salePrice, salePrice) == 0 && dealId.equals(deal.dealId) && gameId.equals(deal.gameId) && storeId.equals(deal.storeId) && Objects.equals(lastChange, deal.lastChange) && Objects.equals(goToDealLink, deal.goToDealLink);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dealId, gameId, storeId, normalPrice, salePrice, lastChange);
+        return Objects.hash(dealId, gameId, storeId, normalPrice, salePrice, lastChange, goToDealLink);
     }
 }

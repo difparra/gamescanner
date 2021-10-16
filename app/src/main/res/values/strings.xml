@@ -7,6 +7,8 @@
     <string name="navigate_up">Navigate up</string>
 
 
+    <!--    Home screen -->
+
     <string name="release_date">Released on: %s</string>
 
     <plurals name="updated_days_ago">
@@ -30,8 +32,14 @@
     <string name="steam_score_info">Steam score: %1$s • %2$s</string>
     <string name="metacritic_score_info">Metacritic score: %s</string>
 
+    <!--    Search screen   -->
+    <string name="price_from">From %s</string>
+
     <!--    States and errors   -->
     <string name="no_search_results_found">No results were found. Try with another query.</string>
+    <string name="search_empty_query">Search query is empty. Try something to begin a search.</string>
+
+    <string name="network_connection_error">There seem to be a problem with your network connection. Please check your network connection and try again.</string>
 
 
 </resources>

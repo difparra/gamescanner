@@ -4,6 +4,7 @@ import com.diegoparra.gamescanner.data.network.dtos.DealDto;
 import com.diegoparra.gamescanner.data.network.dtos.DealLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.DealsListItemDto;
 import com.diegoparra.gamescanner.data.network.dtos.GameInfoDto;
+import com.diegoparra.gamescanner.data.network.dtos.GameListItemDto;
 import com.diegoparra.gamescanner.data.network.dtos.GameLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.StoreDto;
 import com.diegoparra.gamescanner.models.Deal;
@@ -21,6 +22,7 @@ public class DtoMappersImpl implements DtoMappers {
 
     private static final String CHEAPSHARK_URL_PREFIX = "https://www.cheapshark.com";
     private static final String METACRITIC_URL_PREFIX = "https://www.metacritic.com";
+    private static final String BASE_GO_TO_DEAL_LINK = "https://www.cheapshark.com/redirect?dealID=";
 
     @Override
     public Store toStore(StoreDto storeDto) {
@@ -43,7 +45,8 @@ public class DtoMappersImpl implements DtoMappers {
                         dealsListItemDto.getStoreId(),
                         dealsListItemDto.getNormalPrice(),
                         dealsListItemDto.getSalePrice(),
-                        toInstantOrNull(dealsListItemDto.getLastChange())
+                        toInstantOrNull(dealsListItemDto.getLastChange()),
+                        BASE_GO_TO_DEAL_LINK + dealsListItemDto.getDealId()
                 ),
                 new Game(
                         dealsListItemDto.getGameId(),
@@ -51,7 +54,9 @@ public class DtoMappersImpl implements DtoMappers {
                         dealsListItemDto.getThumb(),
                         new SteamInfo(dealsListItemDto.getSteamRatingText(), dealsListItemDto.getSteamRatingPercent(), dealsListItemDto.getSteamRatingCount()),
                         new MetacriticInfo(METACRITIC_URL_PREFIX + dealsListItemDto.getMetacriticLink(), dealsListItemDto.getMetacriticScore()),
-                        toInstantOrNull(dealsListItemDto.getReleaseDate())
+                        toInstantOrNull(dealsListItemDto.getReleaseDate()),
+                        null,
+                        null
                 )
         );
     }
@@ -67,7 +72,8 @@ public class DtoMappersImpl implements DtoMappers {
                             gameInfoDto.getStoreId(),
                             gameInfoDto.getNormalPrice(),
                             gameInfoDto.getSalePrice(),
-                            null
+                            null,
+                            BASE_GO_TO_DEAL_LINK + dealId
                     ),
                     new Game(
                             gameInfoDto.getGameId(),
@@ -75,7 +81,9 @@ public class DtoMappersImpl implements DtoMappers {
                             gameInfoDto.getThumb(),
                             new SteamInfo(gameInfoDto.getSteamRatingText(), gameInfoDto.getSteamRatingPercent(), gameInfoDto.getSteamRatingCount()),
                             new MetacriticInfo(METACRITIC_URL_PREFIX + gameInfoDto.getMetacriticLink(), gameInfoDto.getMetacriticScore()),
-                            toInstantOrNull(gameInfoDto.getReleaseDate())
+                            toInstantOrNull(gameInfoDto.getReleaseDate()),
+                            null,
+                            null
                     )
             );
         }else{
@@ -96,9 +104,26 @@ public class DtoMappersImpl implements DtoMappers {
                 dealDto.getStoreId(),
                 dealDto.getNormalPrice(),
                 dealDto.getSalePrice(),
-                null
+                null,
+                BASE_GO_TO_DEAL_LINK + dealDto.getDealId()
         );
     }
+
+
+    @Override
+    public Game toGame(GameListItemDto gameListItemDto) {
+        return new Game(
+                gameListItemDto.getGameId(),
+                gameListItemDto.getTitle(),
+                gameListItemDto.getThumb(),
+                null,
+                null,
+                null,
+                gameListItemDto.getCheapestDealId(),
+                gameListItemDto.getCheapestPrice()
+        );
+    }
+
 
 
     private Instant toInstantOrNull(long epochSecond) {

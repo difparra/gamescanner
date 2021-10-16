@@ -20,12 +20,12 @@ import android.view.ViewGroup;
 import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentHomeBinding;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
-import com.diegoparra.gamescanner.ui.shared.DealWithGameInfoAdapter;
 import com.diegoparra.gamescanner.utils.EventObserver;
 import com.diegoparra.gamescanner.utils.NavigationUtils;
 import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -101,7 +101,11 @@ public class HomeFragment extends Fragment {
                         adapter.submitList(Collections.emptyList());
                         Throwable error = listResource.getError();
                         Objects.requireNonNull(error);
-                        binding.errorMessage.setText(error.getMessage());
+                        if(error instanceof UnknownHostException) {
+                            binding.errorMessage.setText(R.string.network_connection_error);
+                        }else {
+                            binding.errorMessage.setText(error.getMessage());
+                        }
                         break;
                     }
                 }

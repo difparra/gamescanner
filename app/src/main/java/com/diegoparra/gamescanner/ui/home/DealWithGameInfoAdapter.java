@@ -1,4 +1,4 @@
-package com.diegoparra.gamescanner.ui.shared;
+package com.diegoparra.gamescanner.ui.home;
 
 import android.content.res.Resources;
 import android.text.SpannableString;
@@ -48,7 +48,7 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
         holder.bind(getItem(position));
     }
 
-    public interface OnItemClickListener {
+    interface OnItemClickListener {
         void onItemClick(String dealId);
     }
 

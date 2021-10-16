@@ -2,6 +2,7 @@ package com.diegoparra.gamescanner.data.network;
 
 import com.diegoparra.gamescanner.data.network.dtos.DealLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.DealsListItemDto;
+import com.diegoparra.gamescanner.data.network.dtos.GameListItemDto;
 import com.diegoparra.gamescanner.data.network.dtos.GameLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.StoreDto;
 
@@ -23,11 +24,14 @@ public interface GamesApi {
     Single<List<DealsListItemDto>> getDeals();
 
     @GET("deals")
-    Single<List<DealsListItemDto>> getDealsByTitle(@Query("title") String title);
-
-    @GET("deals")
     Single<DealLookupResponse> getDealById(@Query(value = "id", encoded = true) String dealId);
     //  Must use encoded true, as dealId may contain special characters as % and I don't want to change them in the URL by encoding
+
+    @GET("deals")
+    Single<List<DealsListItemDto>> getDealsByTitle(@Query("title") String title);
+
+    @GET("games")
+    Single<List<GameListItemDto>> getGamesByTitle(@Query("title") String title);
 
     @GET("games")
     Single<GameLookupResponse> getDealsForGame(@Query("id") String gameId);

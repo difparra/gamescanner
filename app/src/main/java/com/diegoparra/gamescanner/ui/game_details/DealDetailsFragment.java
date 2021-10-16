@@ -1,5 +1,7 @@
 package com.diegoparra.gamescanner.ui.game_details;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,16 +23,22 @@ import com.diegoparra.gamescanner.models.SteamInfo;
 import com.diegoparra.gamescanner.models.Store;
 import com.diegoparra.gamescanner.utils.ImageUtils;
 import com.diegoparra.gamescanner.utils.NavigationUtils;
+import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.ViewUtils;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
 
 @AndroidEntryPoint
 public class DealDetailsFragment extends Fragment {
@@ -64,16 +72,33 @@ public class DealDetailsFragment extends Fragment {
     }
 
     private void setUpDealsList() {
-        adapter = new DealWithStoreAdapter();
+        adapter = new DealWithStoreAdapter(this::openGoToDealLink);
         binding.dealsList.setAdapter(adapter);
     }
 
     private void subscribeObservers() {
-        viewModel.getDealWithGameInfo().observe(getViewLifecycleOwner(), new Observer<DealWithGameAndStoreInfo>() {
+        viewModel.getDealWithGameInfo().observe(getViewLifecycleOwner(), new Observer<Resource<DealWithGameAndStoreInfo>>() {
             @Override
-            public void onChanged(DealWithGameAndStoreInfo dealWithGameAndStoreInfo) {
-                loadGameInfo(dealWithGameAndStoreInfo.getGame());
-                loadDealAndStoreInfo(dealWithGameAndStoreInfo.getDeal(), dealWithGameAndStoreInfo.getStore());
+            public void onChanged(Resource<DealWithGameAndStoreInfo> dealWithGameAndStoreInfo) {
+                switch (dealWithGameAndStoreInfo.getStatus()) {
+                    case SUCCESS: {
+                        DealWithGameAndStoreInfo data = dealWithGameAndStoreInfo.getData();
+                        Objects.requireNonNull(data);
+                        loadInfo(data);
+                        break;
+                    }
+                    case ERROR: {
+                        Throwable error = dealWithGameAndStoreInfo.getError();
+                        Objects.requireNonNull(error);
+                        displayError(error);
+                        break;
+                    }
+                }
+            }
+
+            private void loadInfo(@NonNull DealWithGameAndStoreInfo data) {
+                loadGameInfo(data.getGame());
+                loadDealAndStoreInfo(data.getDeal(), data.getStore());
             }
 
             private void loadGameInfo(Game game) {
@@ -122,23 +147,64 @@ public class DealDetailsFragment extends Fragment {
             }
 
             private void loadDealAndStoreInfo(Deal deal, Store store) {
+                binding.cardSelectedDeal.setOnClickListener(view -> {
+                    openGoToDealLink(deal.getGoToDealLink());
+                });
+
                 ImageUtils.loadImageWithPlaceholderAndError(binding.selectedDealLogo, store.getBannerUrl());
+
                 ViewUtils.isVisible(binding.selectedDealDiscount, deal.isOnSale());
                 if(deal.isOnSale()) {
                     String discountPercentStr = String.valueOf((int) deal.getDiscountPercent()) + "%";
                     binding.selectedDealDiscount.setText(discountPercentStr);
                 }
+
                 String priceStr = NumberFormat.getCurrencyInstance(Locale.US).format(deal.getSalePrice());
                 binding.selectedDealPrice.setText(priceStr);
             }
         });
 
-        viewModel.getAdditionalDealsWithStoreInfo().observe(getViewLifecycleOwner(), new Observer<List<DealWithStore>>() {
+        viewModel.getAdditionalDealsWithStoreInfo().observe(getViewLifecycleOwner(), new Observer<Resource<List<DealWithStore>>>() {
             @Override
-            public void onChanged(List<DealWithStore> dealWithStores) {
-                adapter.submitList(dealWithStores);
+            public void onChanged(Resource<List<DealWithStore>> dealWithStores) {
+                switch (dealWithStores.getStatus()) {
+                    case SUCCESS: {
+                        List<DealWithStore> data = dealWithStores.getData();
+                        Objects.requireNonNull(data);
+                        adapter.submitList(data);
+                        break;
+                    }
+                    case ERROR: {
+                        adapter.submitList(Collections.emptyList());
+                        Throwable error = dealWithStores.getError();
+                        Objects.requireNonNull(error);
+                        displayError(error);
+                        break;
+                    }
+                }
             }
         });
+    }
+
+
+    private void openGoToDealLink(String url) {
+        try{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        }catch (Exception e) {
+            e.printStackTrace();
+            Timber.e("Couldn't open URL = " + url + ", exception = " + e);
+        }
+    }
+
+    private void displayError(@NonNull Throwable error) {
+        String message = "";
+        if(error instanceof UnknownHostException) {
+            message = getString(R.string.network_connection_error);
+        }else if(error.getMessage() != null) {
+            message = error.getMessage();
+        }
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

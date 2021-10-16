@@ -4,6 +4,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -21,14 +22,17 @@ import java.util.Locale;
 
 public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithStoreAdapter.ViewHolder> {
 
-    protected DealWithStoreAdapter() {
+    private final OnItemClickListener onItemClickListener;
+
+    protected DealWithStoreAdapter(OnItemClickListener onItemClickListener) {
         super(diffCallback);
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return ViewHolder.create(parent);
+        return ViewHolder.create(parent, onItemClickListener);
     }
 
     @Override
@@ -36,16 +40,31 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
         holder.bind(getItem(position));
     }
 
+    interface OnItemClickListener {
+        void onItemClick(String goToDealLink);
+    }
+
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ListItemDetailAdditionalDealBinding binding;
+        private DealWithStore dealWithStore;
 
-        public ViewHolder(ListItemDetailAdditionalDealBinding binding) {
+        public ViewHolder(ListItemDetailAdditionalDealBinding binding, OnItemClickListener onItemClickListener) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(dealWithStore != null) {
+                        onItemClickListener.onItemClick(dealWithStore.getDeal().getGoToDealLink());
+                    }
+                }
+            });
         }
 
         public void bind(DealWithStore dealWithStore) {
+            this.dealWithStore = dealWithStore;
             Deal deal = dealWithStore.getDeal();
             loadImage(dealWithStore.getStore().getBannerUrl());
             loadDiscount(deal.isOnSale(), deal.getDiscountPercent());
@@ -75,9 +94,9 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
             }
         }
 
-        static ViewHolder create(ViewGroup parent) {
+        static ViewHolder create(ViewGroup parent, OnItemClickListener onItemClickListener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new ViewHolder(ListItemDetailAdditionalDealBinding.inflate(inflater, parent, false));
+            return new ViewHolder(ListItemDetailAdditionalDealBinding.inflate(inflater, parent, false), onItemClickListener);
         }
     }
 

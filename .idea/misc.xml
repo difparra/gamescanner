@@ -23,6 +23,7 @@
         <entry key="app/src/main/res/layout/list_item_deal_with_game_info_home.xml" value="0.2578125" />
         <entry key="app/src/main/res/layout/list_item_detail_additional_deal.xml" value="0.25" />
         <entry key="app/src/main/res/layout/list_item_home_deal.xml" value="0.2578125" />
+        <entry key="app/src/main/res/layout/list_item_search_result.xml" value="0.2578125" />
         <entry key="app/src/main/res/menu/menu_home.xml" value="0.2578125" />
       </map>
     </option>

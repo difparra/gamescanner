@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.diegoparra.gamescanner.data.GamesRepository;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.utils.Event;
 import com.diegoparra.gamescanner.utils.Resource;
 
@@ -34,7 +35,7 @@ public class SearchViewModel extends ViewModel {
 
     private final BehaviorSubject<String> query = BehaviorSubject.create();
     private final GamesRepository repository;
-    private final LiveData<Resource<List<DealWithGameInfo>>> results;
+    private final LiveData<Resource<List<Game>>> results;
     private final MutableLiveData<Event<String>> navigateDetails = new MutableLiveData<>();
 
     @Inject
@@ -45,11 +46,11 @@ public class SearchViewModel extends ViewModel {
         String savedQuery = savedStateHandle.get(QUERY_SAVED_STATE_KEY);
         setQuery(savedQuery != null ? savedQuery : INITIAL_QUERY);
 
-        Flowable<Resource<List<DealWithGameInfo>>> dealWithGameInfoListFlowable = getDealWithGameInfoFlowable();
+        Flowable<Resource<List<Game>>> dealWithGameInfoListFlowable = getDealWithGameInfoFlowable();
         results = LiveDataReactiveStreams.fromPublisher(dealWithGameInfoListFlowable);
     }
 
-    private Flowable<Resource<List<DealWithGameInfo>>> getDealWithGameInfoFlowable() {
+    private Flowable<Resource<List<Game>>> getDealWithGameInfoFlowable() {
         return query
                 .distinctUntilChanged()
                 .debounce(300, TimeUnit.MILLISECONDS)
@@ -58,10 +59,10 @@ public class SearchViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io());
     }
 
-    private ObservableSource<Resource<List<DealWithGameInfo>>> getSearchResultsObservable(String query) {
+    private ObservableSource<Resource<List<Game>>> getSearchResultsObservable(String query) {
         Timber.d("calling api with query: %s", query);
         return repository
-                .getDealsByGameTitle(query)
+                .getGamesByTitle(query)
                 .map(Resource::Success)
                 .toObservable()
                 .startWithItem(Resource.Loading())
@@ -85,7 +86,7 @@ public class SearchViewModel extends ViewModel {
 
     //      ----------      Public data viewModel       --------------------------------------------
 
-    public LiveData<Resource<List<DealWithGameInfo>>> getResults() {
+    public LiveData<Resource<List<Game>>> getResults() {
         return results;
     }
 

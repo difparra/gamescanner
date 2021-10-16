@@ -21,13 +21,15 @@ import android.widget.SearchView;
 import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentSearchBinding;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.ui.home.HomeFragmentDirections;
-import com.diegoparra.gamescanner.ui.shared.DealWithGameInfoAdapter;
+import com.diegoparra.gamescanner.ui.home.DealWithGameInfoAdapter;
 import com.diegoparra.gamescanner.utils.EventObserver;
 import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.SystemUtils;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +42,7 @@ public class SearchFragment extends Fragment {
 
     private SearchViewModel viewModel;
     private FragmentSearchBinding binding;
-    private DealWithGameInfoAdapter adapter;
+    private SearchGamesAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,16 +107,16 @@ public class SearchFragment extends Fragment {
     }
 
     private void setupSearchResultsList() {
-        adapter = new DealWithGameInfoAdapter(dealId -> viewModel.navigateDetails(dealId));
+        adapter = new SearchGamesAdapter(dealId -> viewModel.navigateDetails(dealId));
         binding.searchResults.setHasFixedSize(true);
         binding.searchResults.setAdapter(adapter);
         binding.searchResults.addItemDecoration(new DividerItemDecoration(binding.searchResults.getContext(), DividerItemDecoration.VERTICAL));
     }
 
     private void subscribeObservers() {
-        viewModel.getResults().observe(getViewLifecycleOwner(), new Observer<Resource<List<DealWithGameInfo>>>() {
+        viewModel.getResults().observe(getViewLifecycleOwner(), new Observer<Resource<List<Game>>>() {
             @Override
-            public void onChanged(Resource<List<DealWithGameInfo>> listResource) {
+            public void onChanged(Resource<List<Game>> listResource) {
                 Timber.i("onChanged getResults called! - listResource = %s", listResource);
                 ViewUtils.isVisible(binding.progressCircular, listResource.getStatus() == Resource.Status.LOADING);
                 ViewUtils.isVisible(binding.searchResults, listResource.getStatus() == Resource.Status.SUCCESS);
@@ -124,10 +126,15 @@ public class SearchFragment extends Fragment {
                     case LOADING:
                         break;
                     case SUCCESS: {
-                        List<DealWithGameInfo> data = listResource.getData();
+                        List<Game> data = listResource.getData();
+                        Timber.d("data = %s", data);
                         adapter.submitList(data);
-                        if(data != null && data.isEmpty()) {
-                            binding.message.setText(R.string.no_search_results_found);
+                        if (data != null && data.isEmpty()) {
+                            if (binding.searchView.getQuery().length() == 0) {
+                                binding.message.setText(R.string.search_empty_query);
+                            } else {
+                                binding.message.setText(R.string.no_search_results_found);
+                            }
                             ViewUtils.isVisible(binding.message, true);
                         }
                         break;
@@ -136,7 +143,11 @@ public class SearchFragment extends Fragment {
                         adapter.submitList(Collections.emptyList());
                         Throwable error = listResource.getError();
                         Objects.requireNonNull(error);
-                        binding.message.setText(error.getMessage());
+                        if(error instanceof UnknownHostException) {
+                            binding.message.setText(R.string.network_connection_error);
+                        }else {
+                            binding.message.setText(error.getMessage());
+                        }
                         break;
                     }
                 }

@@ -10,6 +10,7 @@ import com.diegoparra.gamescanner.models.Deal;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Store;
 import com.diegoparra.gamescanner.utils.ListUtils;
+import com.diegoparra.gamescanner.utils.Resource;
 
 import java.util.List;
 
@@ -29,8 +30,8 @@ public class DealDetailsViewModel extends ViewModel {
     private final GamesRepository repository;
 
     private final Flowable<List<Store>> storeListFlowable;
-    private final LiveData<DealWithGameAndStoreInfo> dealWithGameInfo;
-    private final LiveData<List<DealWithStore>> additionalDealsWithStoreInfo;
+    private final LiveData<Resource<DealWithGameAndStoreInfo>> dealWithGameInfo;
+    private final LiveData<Resource<List<DealWithStore>>> additionalDealsWithStoreInfo;
 
     @Inject
     public DealDetailsViewModel(GamesRepository gamesRepository, SavedStateHandle savedStateHandle) {
@@ -41,11 +42,16 @@ public class DealDetailsViewModel extends ViewModel {
 
         Flowable<DealWithGameInfo> dealWithGameInfoFlowable = repository.getDealById(dealId).toFlowable().subscribeOn(Schedulers.io());
         Flowable<DealWithGameAndStoreInfo> dealWithGameAndStoreInfoFlowable = getDealWithGameAndStoreInfo(storeListFlowable, dealWithGameInfoFlowable);
-        this.dealWithGameInfo = LiveDataReactiveStreams.fromPublisher(dealWithGameAndStoreInfoFlowable);
+        this.dealWithGameInfo = LiveDataReactiveStreams.fromPublisher(
+                dealWithGameAndStoreInfoFlowable.map(Resource::Success).onErrorReturn(Resource::Error)
+
+        );
 
         Flowable<String> gameId = dealWithGameInfoFlowable.map(dealWithGameInfo -> dealWithGameInfo.getGame().getGameId());
         Flowable<List<DealWithStore>> additionalDealsWithStoreInfoFlowable = getDealsWithStoreFlowable(gameId);
-        this.additionalDealsWithStoreInfo = LiveDataReactiveStreams.fromPublisher(additionalDealsWithStoreInfoFlowable);
+        this.additionalDealsWithStoreInfo = LiveDataReactiveStreams.fromPublisher(
+                additionalDealsWithStoreInfoFlowable.map(Resource::Success).onErrorReturn(Resource::Error)
+        );
     }
 
     private Flowable<DealWithGameAndStoreInfo> getDealWithGameAndStoreInfo(Flowable<List<Store>> storeListFlowable, Flowable<DealWithGameInfo> dealWithGameInfoFlowable) {
@@ -81,11 +87,11 @@ public class DealDetailsViewModel extends ViewModel {
 
     //      ----------      Public data viewModel       --------------------------------------------
 
-    public LiveData<DealWithGameAndStoreInfo> getDealWithGameInfo() {
+    public LiveData<Resource<DealWithGameAndStoreInfo>> getDealWithGameInfo() {
         return dealWithGameInfo;
     }
 
-    public LiveData<List<DealWithStore>> getAdditionalDealsWithStoreInfo() {
+    public LiveData<Resource<List<DealWithStore>>> getAdditionalDealsWithStoreInfo() {
         return additionalDealsWithStoreInfo;
     }
 
