@@ -3,6 +3,4 @@
     <dimen name="padding_standard">8dp</dimen>
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_big">16dp</dimen>
-
-    <integer name="game_details_deals_columns">2</integer>
 </resources>
