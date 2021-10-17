@@ -1,12 +1,13 @@
 package com.diegoparra.gamescanner.utils;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 public class EventObserver<T> implements Observer<Event<T>> {
 
     private final OnEventUnhandledContent<T> onEventUnhandledContent;
 
-    public EventObserver(OnEventUnhandledContent<T> onEventUnhandledContent) {
+    public EventObserver(@NonNull OnEventUnhandledContent<T> onEventUnhandledContent) {
         this.onEventUnhandledContent = onEventUnhandledContent;
     }
 
