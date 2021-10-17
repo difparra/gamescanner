@@ -5,7 +5,7 @@
     <string name="game_details">Game details</string>
     <string name="search">Search</string>
     <string name="navigate_up">Navigate up</string>
-
+    <string name="retry">Retry</string>
 
     <!--    Home screen -->
 
@@ -35,11 +35,13 @@
     <!--    Search screen   -->
     <string name="price_from">From %s</string>
 
-    <!--    States and errors   -->
+
+    <!--    States   -->
     <string name="no_search_results_found">No results were found. Try with another query.</string>
     <string name="search_empty_query">Search query is empty. Try something to begin a search.</string>
-
+    <!--    Errors  -->
     <string name="network_connection_error">There seem to be a problem with your network connection. Please check your network connection and try again.</string>
+    <string name="unknown_error">Some unexpected error has happened. Please try again later.</string>
 
 
 </resources>

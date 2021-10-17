@@ -21,7 +21,7 @@ public interface GamesApi {
     Single<List<StoreDto>> getStores();
 
     @GET("deals")
-    Single<List<DealsListItemDto>> getDeals();
+    Single<List<DealsListItemDto>> getDeals(@Query("pageNumber") int pageNumber, @Query("pageSize") int pageSize);
 
     @GET("deals")
     Single<DealLookupResponse> getDealById(@Query(value = "id", encoded = true) String dealId);

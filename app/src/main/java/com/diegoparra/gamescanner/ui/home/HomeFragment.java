@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.paging.LoadState;
+import androidx.paging.PagingData;
+import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 import android.view.LayoutInflater;
@@ -20,15 +23,12 @@ import android.view.ViewGroup;
 import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentHomeBinding;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
+import com.diegoparra.gamescanner.utils.ErrorUtils;
 import com.diegoparra.gamescanner.utils.EventObserver;
 import com.diegoparra.gamescanner.utils.NavigationUtils;
-import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 
 import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel viewModel;
     private FragmentHomeBinding binding;
-    private DealWithGameInfoAdapter adapter;
+    private DealWithGameInfoPagedAdapter pagedAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,41 +75,37 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupDealsList() {
-        adapter = new DealWithGameInfoAdapter(dealId -> viewModel.navigateDetails(dealId));
         binding.dealsList.setHasFixedSize(true);
-        binding.dealsList.setAdapter(adapter);
+        pagedAdapter = new DealWithGameInfoPagedAdapter(dealId -> viewModel.navigateDetails(dealId));
+        ConcatAdapter pagedAdapterWithLoadStateHeaderAndFooter = pagedAdapter.withLoadStateHeaderAndFooter(
+                new DealsLoadStateAdapter(pagedAdapter::retry),
+                new DealsLoadStateAdapter(pagedAdapter::retry)
+        );
+        binding.dealsList.setAdapter(pagedAdapterWithLoadStateHeaderAndFooter);
         binding.dealsList.addItemDecoration(new DividerItemDecoration(binding.dealsList.getContext(), DividerItemDecoration.VERTICAL));
+
+        binding.retryButton.setOnClickListener(view -> pagedAdapter.retry());
     }
 
     private void subscribeObservers() {
-        viewModel.getDealWithGameInfoList().observe(getViewLifecycleOwner(), new Observer<Resource<List<DealWithGameInfo>>>() {
+        viewModel.getDealWithGameInfoList().observe(getViewLifecycleOwner(), new Observer<PagingData<DealWithGameInfo>>() {
             @Override
-            public void onChanged(Resource<List<DealWithGameInfo>> listResource) {
-                ViewUtils.isVisible(binding.progressCircular, listResource.getStatus() == Resource.Status.LOADING);
-                ViewUtils.isVisible(binding.dealsList, listResource.getStatus() == Resource.Status.SUCCESS);
-                ViewUtils.isVisible(binding.errorMessage, listResource.getStatus() == Resource.Status.ERROR);
-
-                switch (listResource.getStatus()) {
-                    case LOADING:
-                        break;
-                    case SUCCESS: {
-                        List<DealWithGameInfo> data = listResource.getData();
-                        adapter.submitList(data);
-                        break;
-                    }
-                    case ERROR: {
-                        adapter.submitList(Collections.emptyList());
-                        Throwable error = listResource.getError();
-                        Objects.requireNonNull(error);
-                        if(error instanceof UnknownHostException) {
-                            binding.errorMessage.setText(R.string.network_connection_error);
-                        }else {
-                            binding.errorMessage.setText(error.getMessage());
-                        }
-                        break;
-                    }
-                }
+            public void onChanged(PagingData<DealWithGameInfo> dealWithGameInfoPagingData) {
+                pagedAdapter.submitData(getLifecycle(), dealWithGameInfoPagingData);
             }
+        });
+        pagedAdapter.addLoadStateListener(loadStates -> {
+            ViewUtils.isVisible(binding.progressCircular, loadStates.getRefresh() instanceof LoadState.Loading);
+
+            boolean isError = loadStates.getRefresh() instanceof LoadState.Error;
+            ViewUtils.isVisible(binding.errorMessage, isError);
+            ViewUtils.isVisible(binding.retryButton, isError);
+            if (isError) {
+                String errorMsg = ErrorUtils.getMessage(((LoadState.Error) loadStates.getRefresh()).getError(), binding.getRoot().getContext());
+                binding.errorMessage.setText(errorMsg);
+            }
+
+            return null;
         });
         viewModel.getNavigateDetails().observe(getViewLifecycleOwner(), new EventObserver<>(dealId -> {
             NavDirections navDirections = HomeFragmentDirections.actionGlobalGameDetailsFragment(dealId);

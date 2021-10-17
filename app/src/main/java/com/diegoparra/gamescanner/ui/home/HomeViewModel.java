@@ -4,42 +4,41 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelKt;
+import androidx.paging.PagingData;
+import androidx.paging.rxjava3.PagingRx;
 
 import com.diegoparra.gamescanner.data.GamesRepository;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.utils.Event;
-import com.diegoparra.gamescanner.utils.Resource;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import kotlinx.coroutines.CoroutineScope;
 
 @HiltViewModel
 public class HomeViewModel extends ViewModel {
 
     private final GamesRepository repository;
-    private final LiveData<Resource<List<DealWithGameInfo>>> dealWithGameInfoList;
+    private final LiveData<PagingData<DealWithGameInfo>> dealWithGameInfoList;
     private final MutableLiveData<Event<String>> navigateDetails = new MutableLiveData<>();
 
     @Inject
     public HomeViewModel(GamesRepository gamesRepository) {
         this.repository = gamesRepository;
 
-        Flowable<Resource<List<DealWithGameInfo>>> dealWithGameInfoListFlowable = getDealWithGameInfoListFlowable();
-        this.dealWithGameInfoList = LiveDataReactiveStreams.fromPublisher(dealWithGameInfoListFlowable);
+        Flowable<PagingData<DealWithGameInfo>> dealsRawFlowable = getDealWithGameInfoListFlowable();
+        //  Small implementation to cacheIn flowable according to developers.android Load and display paged data
+        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
+        Flowable<PagingData<DealWithGameInfo>> dealsCachedInFlowable = PagingRx.cachedIn(dealsRawFlowable, viewModelScope);
+        this.dealWithGameInfoList = LiveDataReactiveStreams.fromPublisher(dealsCachedInFlowable);
     }
 
-    private Flowable<Resource<List<DealWithGameInfo>>> getDealWithGameInfoListFlowable() {
-        return repository.getDeals()
-                .map(Resource::Success)
-                .toFlowable()
-                .startWithItem(Resource.Loading())
-                .onErrorReturn(Resource::Error)
-                .subscribeOn(Schedulers.io());
+    private Flowable<PagingData<DealWithGameInfo>> getDealWithGameInfoListFlowable() {
+        return repository.getDeals().subscribeOn(Schedulers.io());
     }
 
 
@@ -53,7 +52,7 @@ public class HomeViewModel extends ViewModel {
 
     //      ----------      Public data viewModel       --------------------------------------------
 
-    public LiveData<Resource<List<DealWithGameInfo>>> getDealWithGameInfoList() {
+    public LiveData<PagingData<DealWithGameInfo>> getDealWithGameInfoList() {
         return dealWithGameInfoList;
     }
 

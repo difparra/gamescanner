@@ -39,15 +39,29 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <TextView
-        android:id="@+id/error_message"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="40dp"
-        android:textAlignment="center"
-        android:visibility="gone"
-        tools:text="An unexpected error has happened. Please try again."
-        tools:visibility="visible" />
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            tools:text="An unexpected error has happened. Please try again."
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

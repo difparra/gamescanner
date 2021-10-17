@@ -21,6 +21,7 @@ import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.models.MetacriticInfo;
 import com.diegoparra.gamescanner.models.SteamInfo;
 import com.diegoparra.gamescanner.models.Store;
+import com.diegoparra.gamescanner.utils.ErrorUtils;
 import com.diegoparra.gamescanner.utils.ImageUtils;
 import com.diegoparra.gamescanner.utils.NavigationUtils;
 import com.diegoparra.gamescanner.utils.Resource;
@@ -198,12 +199,7 @@ public class DealDetailsFragment extends Fragment {
     }
 
     private void displayError(@NonNull Throwable error) {
-        String message = "";
-        if(error instanceof UnknownHostException) {
-            message = getString(R.string.network_connection_error);
-        }else if(error.getMessage() != null) {
-            message = error.getMessage();
-        }
+        String message = ErrorUtils.getMessage(error, binding.getRoot().getContext());
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }
 

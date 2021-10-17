@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.diegoparra.gamescanner.R;
@@ -28,11 +28,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealWithGameInfoAdapter.ViewHolder> {
+public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGameInfo, DealWithGameInfoPagedAdapter.ViewHolder> {
 
     private final OnItemClickListener listener;
 
-    public DealWithGameInfoAdapter(OnItemClickListener listener) {
+    public DealWithGameInfoPagedAdapter(OnItemClickListener listener) {
         super(diffCallback);
         this.listener = listener;
     }
@@ -45,7 +45,10 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        DealWithGameInfo deal = getItem(position);
+        if(deal != null) {
+            holder.bind(deal, position);
+        }
     }
 
     interface OnItemClickListener {
@@ -70,7 +73,7 @@ public class DealWithGameInfoAdapter extends ListAdapter<DealWithGameInfo, DealW
             });
         }
 
-        public void bind(DealWithGameInfo dealWithGameInfo) {
+        public void bind(DealWithGameInfo dealWithGameInfo, int position) {
             this.dealWithGameInfo = dealWithGameInfo;
             Deal dealInfo = dealWithGameInfo.getDeal();
             Game gameInfo = dealWithGameInfo.getGame();

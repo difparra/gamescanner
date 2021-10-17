@@ -1,5 +1,12 @@
 package com.diegoparra.gamescanner.data;
 
+import androidx.lifecycle.ViewModelKt;
+import androidx.paging.Pager;
+import androidx.paging.PagingConfig;
+import androidx.paging.PagingData;
+import androidx.paging.rxjava3.PagingRx;
+
+import com.diegoparra.gamescanner.data.network.DealsPagingSource;
 import com.diegoparra.gamescanner.data.network.DtoMappers;
 import com.diegoparra.gamescanner.data.network.GamesApi;
 import com.diegoparra.gamescanner.data.network.dtos.DealLookupResponse;
@@ -17,8 +24,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Function;
+import kotlinx.coroutines.CoroutineScope;
 import timber.log.Timber;
 
 public class GamesRepositoryImpl implements GamesRepository {
@@ -46,16 +55,13 @@ public class GamesRepositoryImpl implements GamesRepository {
     }
 
     @Override
-    public Single<List<DealWithGameInfo>> getDeals() {
+    public Flowable<PagingData<DealWithGameInfo>> getDeals() {
         Timber.i("getDeals called!");
-        return api.getDeals().map(new Function<List<DealsListItemDto>, List<DealWithGameInfo>>() {
-            @Override
-            public List<DealWithGameInfo> apply(List<DealsListItemDto> dealsListItemDtos) throws Throwable {
-                List<DealWithGameInfo> dealWithGameInfoList = ListUtils.map(dealsListItemDtos, dtoMappers::toDealWithGameInfo);
-                Timber.d("getDeals result: \n dealWithGameInfo={" + ListUtils.joinToString(dealWithGameInfoList, "\n") + "}");
-                return dealWithGameInfoList;
-            }
-        });
+        Pager<Integer, DealWithGameInfo> pager = new Pager<>(
+                new PagingConfig(/* pageSize = */ 20),
+                () -> new DealsPagingSource(api, dtoMappers)
+        );
+        return PagingRx.getFlowable(pager);
     }
 
     @Override

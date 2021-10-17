@@ -20,10 +20,9 @@ import android.widget.SearchView;
 
 import com.diegoparra.gamescanner.R;
 import com.diegoparra.gamescanner.databinding.FragmentSearchBinding;
-import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.ui.home.HomeFragmentDirections;
-import com.diegoparra.gamescanner.ui.home.DealWithGameInfoAdapter;
+import com.diegoparra.gamescanner.utils.ErrorUtils;
 import com.diegoparra.gamescanner.utils.EventObserver;
 import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.SystemUtils;
@@ -143,11 +142,8 @@ public class SearchFragment extends Fragment {
                         adapter.submitList(Collections.emptyList());
                         Throwable error = listResource.getError();
                         Objects.requireNonNull(error);
-                        if(error instanceof UnknownHostException) {
-                            binding.message.setText(R.string.network_connection_error);
-                        }else {
-                            binding.message.setText(error.getMessage());
-                        }
+                        String errorMessage = ErrorUtils.getMessage(error, binding.getRoot().getContext());
+                        binding.message.setText(errorMessage);
                         break;
                     }
                 }
