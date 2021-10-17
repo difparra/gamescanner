@@ -1,8 +1,11 @@
 package com.diegoparra.gamescanner.data.network.dtos;
 
+import androidx.annotation.Nullable;
+
 public class DealLookupResponse {
 
-    private GameInfoDto gameInfo;
+    @Nullable
+    private final GameInfoDto gameInfo;
 
     /*
       I could add cheaperStores and cheapestPrice, as part of attributes in this response,
@@ -16,10 +19,11 @@ public class DealLookupResponse {
         GameLookup query, I actually get info on cheapestPriceEver and deals.
      */
 
-    public DealLookupResponse(GameInfoDto gameInfo) {
+    public DealLookupResponse(@Nullable GameInfoDto gameInfo) {
         this.gameInfo = gameInfo;
     }
 
+    @Nullable
     public GameInfoDto getGameInfo() {
         return gameInfo;
     }

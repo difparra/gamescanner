@@ -1,21 +1,24 @@
 package com.diegoparra.gamescanner.data.network.dtos;
 
+import androidx.annotation.Nullable;
+
 import java.util.List;
 import java.util.Map;
 
 public class GameLookupResponse {
 
     //  Can get this, but it is not so relevant
-    private Map<String, String> info;
-    private CheapestPriceDto cheapestPriceEver;
-    private List<DealDto> deals;
+    @Nullable private final Map<String, String> info;
+    @Nullable private final CheapestPriceDto cheapestPriceEver;
+    @Nullable private final List<DealDto> deals;
 
-    public GameLookupResponse(Map<String, String> info, CheapestPriceDto cheapestPriceEver, List<DealDto> deals) {
+    public GameLookupResponse(@Nullable Map<String, String> info, @Nullable CheapestPriceDto cheapestPriceEver, @Nullable List<DealDto> deals) {
         this.info = info;
         this.cheapestPriceEver = cheapestPriceEver;
         this.deals = deals;
     }
 
+    @Nullable
     public String getTitle() {
         String key = "title";
         if(info != null && info.containsKey(key)) {
@@ -25,6 +28,7 @@ public class GameLookupResponse {
         }
     }
 
+    @Nullable
     public String getSteamAppId() {
         String key = "steamAppID";
         if(info != null && info.containsKey(key)) {
@@ -34,6 +38,7 @@ public class GameLookupResponse {
         }
     }
 
+    @Nullable
     public String getThumb() {
         String key = "thumb";
         if(info != null && info.containsKey(key)) {
@@ -43,10 +48,12 @@ public class GameLookupResponse {
         }
     }
 
+    @Nullable
     public CheapestPriceDto getCheapestPriceEver() {
         return cheapestPriceEver;
     }
 
+    @Nullable
     public List<DealDto> getDeals() {
         return deals;
     }

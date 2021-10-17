@@ -1,6 +1,6 @@
 package com.diegoparra.gamescanner.data;
 
-import androidx.lifecycle.ViewModelKt;
+import androidx.annotation.NonNull;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
@@ -27,20 +27,22 @@ import javax.inject.Inject;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.Function;
-import kotlinx.coroutines.CoroutineScope;
 import timber.log.Timber;
 
 public class GamesRepositoryImpl implements GamesRepository {
 
+    @NonNull
     private final GamesApi api;
+    @NonNull
     private final DtoMappers dtoMappers;
 
     @Inject
-    public GamesRepositoryImpl(GamesApi api, DtoMappers dtoMappers) {
+    public GamesRepositoryImpl(@NonNull GamesApi api, @NonNull DtoMappers dtoMappers) {
         this.api = api;
         this.dtoMappers = dtoMappers;
     }
 
+    @NonNull
     @Override
     public Single<List<Store>> getStores() {
         Timber.i("getStores called!");
@@ -54,18 +56,20 @@ public class GamesRepositoryImpl implements GamesRepository {
         });
     }
 
+    @NonNull
     @Override
     public Flowable<PagingData<DealWithGameInfo>> getDeals() {
         Timber.i("getDeals called!");
         Pager<Integer, DealWithGameInfo> pager = new Pager<>(
-                new PagingConfig(/* pageSize = */ 20),
+                new PagingConfig(20),
                 () -> new DealsPagingSource(api, dtoMappers)
         );
         return PagingRx.getFlowable(pager);
     }
 
+    @NonNull
     @Override
-    public Single<DealWithGameInfo> getDealById(String dealId) {
+    public Single<DealWithGameInfo> getDealById(@NonNull String dealId) {
         Timber.i("getDealById called! with dealId=%s", dealId);
         return api.getDealById(dealId).map(new Function<DealLookupResponse, DealWithGameInfo>() {
             @Override
@@ -77,8 +81,9 @@ public class GamesRepositoryImpl implements GamesRepository {
         });
     }
 
+    @NonNull
     @Override
-    public Single<List<DealWithGameInfo>> getDealsByGameTitle(String title) {
+    public Single<List<DealWithGameInfo>> getDealsByGameTitle(@NonNull String title) {
         Timber.i("getDealsByGameTitle called! with title=%s", title);
         return api.getDealsByTitle(title).map(new Function<List<DealsListItemDto>, List<DealWithGameInfo>>() {
             @Override
@@ -90,8 +95,9 @@ public class GamesRepositoryImpl implements GamesRepository {
         });
     }
 
+    @NonNull
     @Override
-    public Single<List<Game>> getGamesByTitle(String title) {
+    public Single<List<Game>> getGamesByTitle(@NonNull String title) {
         Timber.i("getGamesByTitle called! with title=%s", title);
         return api.getGamesByTitle(title).map(new Function<List<GameListItemDto>, List<Game>>() {
             @Override
@@ -103,8 +109,9 @@ public class GamesRepositoryImpl implements GamesRepository {
         });
     }
 
+    @NonNull
     @Override
-    public Single<List<Deal>> getDealsForGame(String gameId) {
+    public Single<List<Deal>> getDealsForGame(@NonNull String gameId) {
         Timber.i("getDealsForGame called! with gameId=%s", gameId);
         return api.getDealsForGame(gameId).map(new Function<GameLookupResponse, List<Deal>>() {
             @Override

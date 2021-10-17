@@ -1,21 +1,28 @@
 package com.diegoparra.gamescanner.data.network.dtos;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class DealDto {
 
+    @Nullable
     @SerializedName("storeID")
-    private String storeId;
+    private final String storeId;
+    @Nullable
     @SerializedName("dealID")
-    private String dealId;
+    private final String dealId;
+    @Nullable
     @SerializedName("retailPrice")
-    private float normalPrice;
+    private final Float normalPrice;
+    @Nullable
     @SerializedName("price")
-    private float salePrice;
+    private final Float salePrice;
+    @Nullable
     @SerializedName("savings")
-    private float discountPercent;
+    private final Float discountPercent;
 
-    public DealDto(String storeId, String dealId, float normalPrice, float salePrice, float discountPercent) {
+    public DealDto(@Nullable String storeId, @Nullable String dealId, @Nullable Float normalPrice, @Nullable Float salePrice, @Nullable Float discountPercent) {
         this.storeId = storeId;
         this.dealId = dealId;
         this.normalPrice = normalPrice;
@@ -23,23 +30,28 @@ public class DealDto {
         this.discountPercent = discountPercent;
     }
 
+    @Nullable
     public String getStoreId() {
         return storeId;
     }
 
+    @Nullable
     public String getDealId() {
         return dealId;
     }
 
-    public float getNormalPrice() {
+    @Nullable
+    public Float getNormalPrice() {
         return normalPrice;
     }
 
-    public float getSalePrice() {
+    @Nullable
+    public Float getSalePrice() {
         return salePrice;
     }
 
-    public float getDiscountPercent() {
+    @Nullable
+    public Float getDiscountPercent() {
         return discountPercent;
     }
 }

@@ -1,5 +1,7 @@
 package com.diegoparra.gamescanner.ui.game_details;
 
+import androidx.annotation.NonNull;
+
 import com.diegoparra.gamescanner.models.Deal;
 import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Game;
@@ -14,22 +16,27 @@ import com.diegoparra.gamescanner.models.Store;
  */
 public class DealWithGameAndStoreInfo {
 
+    @NonNull
     private final DealWithGameInfo dealWithGameInfo;
+    @NonNull
     private final Store store;
 
-    public DealWithGameAndStoreInfo(DealWithGameInfo dealWithGameInfo, Store store) {
+    public DealWithGameAndStoreInfo(@NonNull DealWithGameInfo dealWithGameInfo, @NonNull Store store) {
         this.dealWithGameInfo = dealWithGameInfo;
         this.store = store;
     }
 
+    @NonNull
     public Deal getDeal() {
         return dealWithGameInfo.getDeal();
     }
 
+    @NonNull
     public Game getGame() {
         return dealWithGameInfo.getGame();
     }
 
+    @NonNull
     public Store getStore() {
         return store;
     }

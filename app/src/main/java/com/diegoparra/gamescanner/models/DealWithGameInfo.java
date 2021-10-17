@@ -6,18 +6,22 @@ import java.util.Objects;
 
 public class DealWithGameInfo {
 
-    private Deal deal;
-    private Game game;
+    @NonNull
+    private final Deal deal;
+    @NonNull
+    private final Game game;
 
-    public DealWithGameInfo(Deal deal, Game game) {
+    public DealWithGameInfo(@NonNull Deal deal, @NonNull Game game) {
         this.deal = deal;
         this.game = game;
     }
 
+    @NonNull
     public Deal getDeal() {
         return deal;
     }
 
+    @NonNull
     public Game getGame() {
         return game;
     }

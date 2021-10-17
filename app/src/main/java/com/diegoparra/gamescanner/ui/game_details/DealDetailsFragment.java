@@ -28,7 +28,6 @@ import com.diegoparra.gamescanner.utils.Resource;
 import com.diegoparra.gamescanner.utils.ViewUtils;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -83,14 +82,12 @@ public class DealDetailsFragment extends Fragment {
             public void onChanged(Resource<DealWithGameAndStoreInfo> dealWithGameAndStoreInfo) {
                 switch (dealWithGameAndStoreInfo.getStatus()) {
                     case SUCCESS: {
-                        DealWithGameAndStoreInfo data = dealWithGameAndStoreInfo.getData();
-                        Objects.requireNonNull(data);
+                        DealWithGameAndStoreInfo data = Objects.requireNonNull(dealWithGameAndStoreInfo.getData());
                         loadInfo(data);
                         break;
                     }
                     case ERROR: {
-                        Throwable error = dealWithGameAndStoreInfo.getError();
-                        Objects.requireNonNull(error);
+                        Throwable error = Objects.requireNonNull(dealWithGameAndStoreInfo.getError());
                         displayError(error);
                         break;
                     }
@@ -102,22 +99,20 @@ public class DealDetailsFragment extends Fragment {
                 loadDealAndStoreInfo(data.getDeal(), data.getStore());
             }
 
-            private void loadGameInfo(Game game) {
-                if(game != null) {
-                    binding.toolbar.setTitle(game.getTitle());
-                    binding.title.setText(game.getTitle());
-                    loadImage(game.getImageUrl());
-                    loadReleaseDate(game.getReleaseDate());
-                    loadSteamInfo(game.getSteamInfo());
-                    loadMetacriticInfo(game.getMetacriticInfo());
-                }
+            private void loadGameInfo(@NonNull Game game) {
+                binding.toolbar.setTitle(game.getTitle());
+                binding.title.setText(game.getTitle());
+                loadImage(game.getImageUrl());
+                loadReleaseDate(game.getReleaseDate());
+                loadSteamInfo(game.getSteamInfo());
+                loadMetacriticInfo(game.getMetacriticInfo());
             }
 
-            private void loadImage(String imageUrl) {
+            private void loadImage(@Nullable String imageUrl) {
                 ImageUtils.loadImageWithPlaceholderAndError(binding.image, imageUrl);
             }
 
-            private void loadReleaseDate(LocalDate releaseDate) {
+            private void loadReleaseDate(@Nullable LocalDate releaseDate) {
                 ViewUtils.isVisible(binding.releaseDate, releaseDate != null);
                 if (releaseDate != null) {
                     String dateFormatted = releaseDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
@@ -126,8 +121,8 @@ public class DealDetailsFragment extends Fragment {
                 }
             }
 
-            private void loadSteamInfo(SteamInfo steamInfo) {
-                boolean isVisible = steamInfo != null && steamInfo.getRatingPercent() > 0;
+            private void loadSteamInfo(@Nullable SteamInfo steamInfo) {
+                boolean isVisible = steamInfo != null && steamInfo.getRatingPercent() != null && steamInfo.getRatingPercent() > 0;
                 ViewUtils.isVisible(binding.steamScore, isVisible);
                 if (isVisible) {
                     String score = String.valueOf(steamInfo.getRatingPercent()) + "%";
@@ -137,8 +132,8 @@ public class DealDetailsFragment extends Fragment {
                 }
             }
 
-            private void loadMetacriticInfo(MetacriticInfo metacriticInfo) {
-                boolean isVisible = metacriticInfo != null && metacriticInfo.getRatingPercent() > 0;
+            private void loadMetacriticInfo(@Nullable MetacriticInfo metacriticInfo) {
+                boolean isVisible = metacriticInfo != null && metacriticInfo.getRatingPercent() != null && metacriticInfo.getRatingPercent() > 0;
                 ViewUtils.isVisible(binding.metacriticScore, isVisible);
                 if (isVisible) {
                     String score = String.valueOf(metacriticInfo.getRatingPercent()) + "%";
@@ -147,15 +142,13 @@ public class DealDetailsFragment extends Fragment {
                 }
             }
 
-            private void loadDealAndStoreInfo(Deal deal, Store store) {
-                binding.cardSelectedDeal.setOnClickListener(view -> {
-                    openGoToDealLink(deal.getGoToDealLink());
-                });
+            private void loadDealAndStoreInfo(@NonNull Deal deal, @NonNull Store store) {
+                binding.cardSelectedDeal.setOnClickListener(view -> openGoToDealLink(deal.getGoToDealLink()));
 
                 ImageUtils.loadImageWithPlaceholderAndError(binding.selectedDealLogo, store.getBannerUrl());
 
                 ViewUtils.isVisible(binding.selectedDealDiscount, deal.isOnSale());
-                if(deal.isOnSale()) {
+                if (deal.isOnSale()) {
                     String discountPercentStr = String.valueOf((int) deal.getDiscountPercent()) + "%";
                     binding.selectedDealDiscount.setText(discountPercentStr);
                 }
@@ -188,11 +181,11 @@ public class DealDetailsFragment extends Fragment {
     }
 
 
-    private void openGoToDealLink(String url) {
-        try{
+    private void openGoToDealLink(@NonNull String url) {
+        try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Timber.e("Couldn't open URL = " + url + ", exception = " + e);
         }

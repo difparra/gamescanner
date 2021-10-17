@@ -1,24 +1,29 @@
 package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
 public class MetacriticInfo {
 
-    private String url;
-    private int ratingPercent;
+    @Nullable
+    private final String url;
+    @Nullable
+    private final Integer ratingPercent;
 
-    public MetacriticInfo(String url, int ratingPercent) {
+    public MetacriticInfo(@Nullable String url, @Nullable Integer ratingPercent) {
         this.url = url;
         this.ratingPercent = ratingPercent;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }
 
-    public int getRatingPercent() {
+    @Nullable
+    public Integer getRatingPercent() {
         return ratingPercent;
     }
 
@@ -36,7 +41,7 @@ public class MetacriticInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MetacriticInfo that = (MetacriticInfo) o;
-        return ratingPercent == that.ratingPercent && Objects.equals(url, that.url);
+        return Objects.equals(url, that.url) && Objects.equals(ratingPercent, that.ratingPercent);
     }
 
     @Override

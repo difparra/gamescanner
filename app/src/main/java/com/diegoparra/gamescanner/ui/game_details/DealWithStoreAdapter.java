@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,9 +23,10 @@ import java.util.Locale;
 
 public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithStoreAdapter.ViewHolder> {
 
+    @NonNull
     private final OnItemClickListener onItemClickListener;
 
-    protected DealWithStoreAdapter(OnItemClickListener onItemClickListener) {
+    protected DealWithStoreAdapter(@NonNull OnItemClickListener onItemClickListener) {
         super(diffCallback);
         this.onItemClickListener = onItemClickListener;
     }
@@ -41,7 +43,7 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
     }
 
     interface OnItemClickListener {
-        void onItemClick(String goToDealLink);
+        void onItemClick(@NonNull String goToDealLink);
     }
 
 
@@ -50,20 +52,20 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
         private final ListItemDetailAdditionalDealBinding binding;
         private DealWithStore dealWithStore;
 
-        public ViewHolder(ListItemDetailAdditionalDealBinding binding, OnItemClickListener onItemClickListener) {
+        public ViewHolder(@NonNull ListItemDetailAdditionalDealBinding binding, @NonNull OnItemClickListener onItemClickListener) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(dealWithStore != null) {
+                    if(dealWithStore != null && dealWithStore.getDeal().getGoToDealLink() != null) {
                         onItemClickListener.onItemClick(dealWithStore.getDeal().getGoToDealLink());
                     }
                 }
             });
         }
 
-        public void bind(DealWithStore dealWithStore) {
+        public void bind(@NonNull DealWithStore dealWithStore) {
             this.dealWithStore = dealWithStore;
             Deal deal = dealWithStore.getDeal();
             loadImage(dealWithStore.getStore().getBannerUrl());
@@ -71,7 +73,7 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
             loadPrice(deal.isOnSale(), deal.getNormalPrice(), deal.getSalePrice());
         }
 
-        private void loadImage(String imageUrl) {
+        private void loadImage(@Nullable String imageUrl) {
             ImageUtils.loadImageWithPlaceholderAndError(binding.storeLogo, imageUrl);
         }
 
@@ -94,7 +96,7 @@ public class DealWithStoreAdapter extends ListAdapter<DealWithStore, DealWithSto
             }
         }
 
-        static ViewHolder create(ViewGroup parent, OnItemClickListener onItemClickListener) {
+        static ViewHolder create(@NonNull ViewGroup parent, @NonNull OnItemClickListener onItemClickListener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             return new ViewHolder(ListItemDetailAdditionalDealBinding.inflate(inflater, parent, false), onItemClickListener);
         }

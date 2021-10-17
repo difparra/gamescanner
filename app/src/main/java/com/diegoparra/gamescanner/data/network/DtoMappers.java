@@ -1,5 +1,7 @@
 package com.diegoparra.gamescanner.data.network;
 
+import androidx.annotation.NonNull;
+
 import com.diegoparra.gamescanner.data.network.dtos.DealLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.DealsListItemDto;
 import com.diegoparra.gamescanner.data.network.dtos.GameListItemDto;
@@ -14,10 +16,19 @@ import java.util.List;
 
 public interface DtoMappers {
 
-    Store toStore(StoreDto storeDto);
-    DealWithGameInfo toDealWithGameInfo(DealsListItemDto dealsListItemDto);
-    DealWithGameInfo toDealWithGameInfo(DealLookupResponse dealLookupResponse, String dealId);
-    List<Deal> toDealsList(GameLookupResponse gameLookupResponse, String gameId);
-    Game toGame(GameListItemDto gameListItemDto);
+    @NonNull
+    Store toStore(@NonNull StoreDto storeDto);
+
+    @NonNull
+    DealWithGameInfo toDealWithGameInfo(@NonNull DealsListItemDto dealsListItemDto);
+
+    @NonNull
+    DealWithGameInfo toDealWithGameInfo(@NonNull DealLookupResponse dealLookupResponse, @NonNull String dealId);
+
+    @NonNull
+    List<Deal> toDealsList(@NonNull GameLookupResponse gameLookupResponse, @NonNull String gameId);
+
+    @NonNull
+    Game toGame(@NonNull GameListItemDto gameListItemDto);
 
 }

@@ -18,9 +18,10 @@ import java.util.Locale;
 
 public class SearchGamesAdapter extends ListAdapter<Game, SearchGamesAdapter.ViewHolder> {
 
+    @NonNull
     private final OnItemClickListener onItemClickListener;
 
-    protected SearchGamesAdapter(OnItemClickListener onItemClickListener) {
+    protected SearchGamesAdapter(@NonNull OnItemClickListener onItemClickListener) {
         super(diffCallback);
         this.onItemClickListener = onItemClickListener;
     }
@@ -41,7 +42,7 @@ public class SearchGamesAdapter extends ListAdapter<Game, SearchGamesAdapter.Vie
 
 
     interface OnItemClickListener {
-        void onItemClick(String dealId);
+        void onItemClick(@NonNull String dealId);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,7 +50,7 @@ public class SearchGamesAdapter extends ListAdapter<Game, SearchGamesAdapter.Vie
         private final ListItemSearchGameResultBinding binding;
         private Game game;
 
-        public ViewHolder(ListItemSearchGameResultBinding binding, OnItemClickListener onItemClickListener) {
+        public ViewHolder(@NonNull ListItemSearchGameResultBinding binding, @NonNull OnItemClickListener onItemClickListener) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
@@ -72,7 +73,7 @@ public class SearchGamesAdapter extends ListAdapter<Game, SearchGamesAdapter.Vie
         }
 
 
-        static ViewHolder create(ViewGroup parent, OnItemClickListener onItemClickListener) {
+        static ViewHolder create(@NonNull ViewGroup parent, @NonNull OnItemClickListener onItemClickListener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             return new ViewHolder(ListItemSearchGameResultBinding.inflate(inflater, parent, false), onItemClickListener);
         }

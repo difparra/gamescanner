@@ -1,5 +1,8 @@
 package com.diegoparra.gamescanner.data.network;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.diegoparra.gamescanner.data.network.dtos.DealDto;
 import com.diegoparra.gamescanner.data.network.dtos.DealLookupResponse;
 import com.diegoparra.gamescanner.data.network.dtos.DealsListItemDto;
@@ -16,7 +19,9 @@ import com.diegoparra.gamescanner.models.Store;
 import com.diegoparra.gamescanner.utils.ListUtils;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class DtoMappersImpl implements DtoMappers {
 
@@ -24,11 +29,15 @@ public class DtoMappersImpl implements DtoMappers {
     private static final String METACRITIC_URL_PREFIX = "https://www.metacritic.com";
     private static final String BASE_GO_TO_DEAL_LINK = "https://www.cheapshark.com/redirect?dealID=";
 
+    private static final String DEAFULT_STRING = "";
+    private static final float DEFAULT_FLOAT = 0;
+
+    @NonNull
     @Override
-    public Store toStore(StoreDto storeDto) {
+    public Store toStore(@NonNull StoreDto storeDto) {
         return new Store(
-                storeDto.getStoreId(),
-                storeDto.getStoreName(),
+                Objects.requireNonNull(storeDto.getStoreId()),
+                toStringOrDefault(storeDto.getStoreName()),
                 storeDto.isActive(),
                 CHEAPSHARK_URL_PREFIX + storeDto.getImgBanner(),
                 CHEAPSHARK_URL_PREFIX + storeDto.getImgLogo(),
@@ -36,21 +45,22 @@ public class DtoMappersImpl implements DtoMappers {
         );
     }
 
+    @NonNull
     @Override
-    public DealWithGameInfo toDealWithGameInfo(DealsListItemDto dealsListItemDto) {
+    public DealWithGameInfo toDealWithGameInfo(@NonNull DealsListItemDto dealsListItemDto) {
         return new DealWithGameInfo(
                 new Deal(
-                        dealsListItemDto.getDealId(),
-                        dealsListItemDto.getGameId(),
-                        dealsListItemDto.getStoreId(),
-                        dealsListItemDto.getNormalPrice(),
-                        dealsListItemDto.getSalePrice(),
+                        Objects.requireNonNull(dealsListItemDto.getDealId()),
+                        Objects.requireNonNull(dealsListItemDto.getGameId()),
+                        Objects.requireNonNull(dealsListItemDto.getStoreId()),
+                        toFloatOrDefault(dealsListItemDto.getNormalPrice()),
+                        toFloatOrDefault(dealsListItemDto.getSalePrice()),
                         toInstantOrNull(dealsListItemDto.getLastChange()),
                         BASE_GO_TO_DEAL_LINK + dealsListItemDto.getDealId()
                 ),
                 new Game(
                         dealsListItemDto.getGameId(),
-                        dealsListItemDto.getTitle(),
+                        toStringOrDefault(dealsListItemDto.getTitle()),
                         dealsListItemDto.getThumb(),
                         new SteamInfo(dealsListItemDto.getSteamRatingText(), dealsListItemDto.getSteamRatingPercent(), dealsListItemDto.getSteamRatingCount()),
                         new MetacriticInfo(METACRITIC_URL_PREFIX + dealsListItemDto.getMetacriticLink(), dealsListItemDto.getMetacriticScore()),
@@ -61,60 +71,61 @@ public class DtoMappersImpl implements DtoMappers {
         );
     }
 
+    @NonNull
     @Override
-    public DealWithGameInfo toDealWithGameInfo(DealLookupResponse dealLookupResponse, String dealId) {
+    public DealWithGameInfo toDealWithGameInfo(@NonNull DealLookupResponse dealLookupResponse, @NonNull String dealId) {
         GameInfoDto gameInfoDto = dealLookupResponse.getGameInfo();
-        if(gameInfoDto != null) {
-            return new DealWithGameInfo(
-                    new Deal(
-                            dealId,
-                            gameInfoDto.getGameId(),
-                            gameInfoDto.getStoreId(),
-                            gameInfoDto.getNormalPrice(),
-                            gameInfoDto.getSalePrice(),
-                            null,
-                            BASE_GO_TO_DEAL_LINK + dealId
-                    ),
-                    new Game(
-                            gameInfoDto.getGameId(),
-                            gameInfoDto.getName(),
-                            gameInfoDto.getThumb(),
-                            new SteamInfo(gameInfoDto.getSteamRatingText(), gameInfoDto.getSteamRatingPercent(), gameInfoDto.getSteamRatingCount()),
-                            new MetacriticInfo(METACRITIC_URL_PREFIX + gameInfoDto.getMetacriticLink(), gameInfoDto.getMetacriticScore()),
-                            toInstantOrNull(gameInfoDto.getReleaseDate()),
-                            null,
-                            null
-                    )
-            );
-        }else{
-            return null;
-        }
+        Objects.requireNonNull(gameInfoDto);
+        return new DealWithGameInfo(
+                new Deal(
+                        dealId,
+                        Objects.requireNonNull(gameInfoDto.getGameId()),
+                        Objects.requireNonNull(gameInfoDto.getStoreId()),
+                        toFloatOrDefault(gameInfoDto.getNormalPrice()),
+                        toFloatOrDefault(gameInfoDto.getSalePrice()),
+                        null,
+                        BASE_GO_TO_DEAL_LINK + dealId
+                ),
+                new Game(
+                        gameInfoDto.getGameId(),
+                        toStringOrDefault(gameInfoDto.getName()),
+                        gameInfoDto.getThumb(),
+                        new SteamInfo(gameInfoDto.getSteamRatingText(), gameInfoDto.getSteamRatingPercent(), gameInfoDto.getSteamRatingCount()),
+                        new MetacriticInfo(METACRITIC_URL_PREFIX + gameInfoDto.getMetacriticLink(), gameInfoDto.getMetacriticScore()),
+                        toInstantOrNull(gameInfoDto.getReleaseDate()),
+                        null,
+                        null
+                )
+        );
     }
 
+    @NonNull
     @Override
-    public List<Deal> toDealsList(GameLookupResponse gameLookupResponse, String gameId) {
-        List<DealDto> dealDtos = gameLookupResponse.getDeals();
+    public List<Deal> toDealsList(@NonNull GameLookupResponse gameLookupResponse, @NonNull String gameId) {
+        List<DealDto> dealDtos = gameLookupResponse.getDeals() != null ? gameLookupResponse.getDeals() : Collections.emptyList();
         return ListUtils.map(dealDtos, dealDto -> toDeal(dealDto, gameId));
     }
 
-    private Deal toDeal(DealDto dealDto, String gameId) {
+    @NonNull
+    private Deal toDeal(@NonNull DealDto dealDto, @NonNull String gameId) {
         return new Deal(
-                dealDto.getDealId(),
+                Objects.requireNonNull(dealDto.getDealId()),
                 gameId,
-                dealDto.getStoreId(),
-                dealDto.getNormalPrice(),
-                dealDto.getSalePrice(),
+                Objects.requireNonNull(dealDto.getStoreId()),
+                toFloatOrDefault(dealDto.getNormalPrice()),
+                toFloatOrDefault(dealDto.getSalePrice()),
                 null,
                 BASE_GO_TO_DEAL_LINK + dealDto.getDealId()
         );
     }
 
 
+    @NonNull
     @Override
-    public Game toGame(GameListItemDto gameListItemDto) {
+    public Game toGame(@NonNull GameListItemDto gameListItemDto) {
         return new Game(
-                gameListItemDto.getGameId(),
-                gameListItemDto.getTitle(),
+                Objects.requireNonNull(gameListItemDto.getGameId()),
+                toStringOrDefault(gameListItemDto.getTitle()),
                 gameListItemDto.getThumb(),
                 null,
                 null,
@@ -125,11 +136,22 @@ public class DtoMappersImpl implements DtoMappers {
     }
 
 
+    //      UTIL FUNCTIONS FOR MAPPING      --------------------------------------------------------
 
-    private Instant toInstantOrNull(long epochSecond) {
-        if(epochSecond <= 0) {
+    private float toFloatOrDefault(@Nullable Float number) {
+        return number != null ? number : DEFAULT_FLOAT;
+    }
+
+    @NonNull
+    private String toStringOrDefault(@Nullable String string) {
+        return string != null ? string : DEAFULT_STRING;
+    }
+
+    @Nullable
+    private Instant toInstantOrNull(Long epochSecond) {
+        if (epochSecond == null || epochSecond <= 0) {
             return null;
-        }else {
+        } else {
             return Instant.ofEpochSecond(epochSecond);
         }
     }

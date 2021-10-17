@@ -1,20 +1,24 @@
 package com.diegoparra.gamescanner.data.network.dtos;
 
+import androidx.annotation.Nullable;
+
 public class CheapestPriceDto {
 
-    private float price;
-    private long date;
+    @Nullable private final Float price;
+    @Nullable private final Long date;
 
-    public CheapestPriceDto(float price, long date) {
+    public CheapestPriceDto(@Nullable Float price, @Nullable Long date) {
         this.price = price;
         this.date = date;
     }
 
-    public float getPrice() {
+    @Nullable
+    public Float getPrice() {
         return price;
     }
 
-    public long getDate() {
+    @Nullable
+    public Long getDate() {
         return date;
     }
 }

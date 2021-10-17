@@ -1,6 +1,7 @@
 package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -11,15 +12,26 @@ import java.util.Objects;
 
 public class Deal {
 
-    private String dealId;
-    private String gameId;
-    private String storeId;
-    private float normalPrice;
-    private float salePrice;
-    private Instant lastChange;
-    private String goToDealLink;
+    @NonNull
+    private final String dealId;
+    @NonNull
+    private final String gameId;
+    @NonNull
+    private final String storeId;
+    private final float normalPrice;
+    private final float salePrice;
+    @Nullable
+    private final Instant lastChange;
+    @Nullable
+    private final String goToDealLink;
 
-    public Deal(String dealId, String gameId, String storeId, float normalPrice, float salePrice, Instant lastChange, String goToDealLink) {
+    public Deal(@NonNull String dealId,
+                @NonNull String gameId,
+                @NonNull String storeId,
+                float normalPrice,
+                float salePrice,
+                @Nullable Instant lastChange,
+                @Nullable String goToDealLink) {
         this.dealId = dealId;
         this.gameId = gameId;
         this.storeId = storeId;
@@ -29,14 +41,17 @@ public class Deal {
         this.goToDealLink = goToDealLink;
     }
 
+    @NonNull
     public String getDealId() {
         return dealId;
     }
 
+    @NonNull
     public String getGameId() {
         return gameId;
     }
 
+    @NonNull
     public String getStoreId() {
         return storeId;
     }
@@ -50,32 +65,36 @@ public class Deal {
     }
 
     public float getDiscountPercent() {
-        return (1 - (salePrice / normalPrice))*100;
+        return (1 - (salePrice / normalPrice)) * 100;
     }
 
     public boolean isOnSale() {
-        return normalPrice > salePrice + 0.1;
+        return normalPrice > salePrice + 0.01;
     }
 
+    @Nullable
     public LocalDate getDateLastChange() {
-        if(lastChange != null) {
+        if (lastChange != null) {
             return LocalDateTime.ofInstant(lastChange, ZoneId.systemDefault()).toLocalDate();
         } else {
             return null;
         }
     }
 
-    public Duration getTimeSinceLastChange(){
-        if(lastChange != null) {
+    @Nullable
+    public Duration getTimeSinceLastChange() {
+        if (lastChange != null) {
             return Duration.between(lastChange, Instant.now());
         } else {
             return null;
         }
     }
 
+    @Nullable
     public String getGoToDealLink() {
         return goToDealLink;
     }
+
 
     @NonNull
     @Override
@@ -87,7 +106,7 @@ public class Deal {
                 ", normalPrice=" + normalPrice +
                 ", salePrice=" + salePrice +
                 ", lastChange=" + lastChange +
-                ", goToDealLik='" + goToDealLink + '\'' +
+                ", goToDealLink='" + goToDealLink + '\'' +
                 '}';
     }
 

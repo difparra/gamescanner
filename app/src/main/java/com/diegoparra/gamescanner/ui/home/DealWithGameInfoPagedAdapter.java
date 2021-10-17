@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,9 +31,10 @@ import java.util.Locale;
 
 public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGameInfo, DealWithGameInfoPagedAdapter.ViewHolder> {
 
+    @NonNull
     private final OnItemClickListener listener;
 
-    public DealWithGameInfoPagedAdapter(OnItemClickListener listener) {
+    public DealWithGameInfoPagedAdapter(@NonNull OnItemClickListener listener) {
         super(diffCallback);
         this.listener = listener;
     }
@@ -47,12 +49,12 @@ public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGame
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DealWithGameInfo deal = getItem(position);
         if(deal != null) {
-            holder.bind(deal, position);
+            holder.bind(deal);
         }
     }
 
     interface OnItemClickListener {
-        void onItemClick(String dealId);
+        void onItemClick(@NonNull String dealId);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +62,7 @@ public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGame
         private final ListItemHomeDealBinding binding;
         private DealWithGameInfo dealWithGameInfo;
 
-        public ViewHolder(ListItemHomeDealBinding binding, OnItemClickListener listener) {
+        public ViewHolder(@NonNull ListItemHomeDealBinding binding, @NonNull OnItemClickListener listener) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
@@ -73,7 +75,7 @@ public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGame
             });
         }
 
-        public void bind(DealWithGameInfo dealWithGameInfo, int position) {
+        public void bind(@NonNull DealWithGameInfo dealWithGameInfo) {
             this.dealWithGameInfo = dealWithGameInfo;
             Deal dealInfo = dealWithGameInfo.getDeal();
             Game gameInfo = dealWithGameInfo.getGame();
@@ -84,11 +86,11 @@ public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGame
             loadPrices(dealInfo.getNormalPrice(), dealInfo.getSalePrice(), dealInfo.getDiscountPercent());
         }
 
-        private void loadImage(String imageUrl) {
+        private void loadImage(@Nullable String imageUrl) {
             ImageUtils.loadImageWithPlaceholderAndError(binding.image, imageUrl);
         }
 
-        private void loadReleaseDate(LocalDate releaseDate) {
+        private void loadReleaseDate(@Nullable LocalDate releaseDate) {
             ViewUtils.isVisible(binding.releaseDate, releaseDate != null);
             if (releaseDate != null) {
                 String dateFormatted = releaseDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
@@ -97,7 +99,7 @@ public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGame
             }
         }
 
-        private void loadLastUpdated(Duration timeSinceLastUpdated) {
+        private void loadLastUpdated(@Nullable Duration timeSinceLastUpdated) {
             ViewUtils.isVisible(binding.lastUpdated, timeSinceLastUpdated != null);
             if (timeSinceLastUpdated != null) {
                 long days = timeSinceLastUpdated.toDays();
@@ -135,7 +137,7 @@ public class DealWithGameInfoPagedAdapter extends PagingDataAdapter<DealWithGame
         }
 
 
-        static ViewHolder create(ViewGroup parent, OnItemClickListener listener) {
+        static ViewHolder create(@NonNull ViewGroup parent, @NonNull OnItemClickListener listener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             return new ViewHolder(ListItemHomeDealBinding.inflate(inflater, parent, false), listener);
         }

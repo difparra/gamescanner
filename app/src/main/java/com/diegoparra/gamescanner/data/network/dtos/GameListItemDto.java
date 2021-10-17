@@ -1,56 +1,66 @@
 package com.diegoparra.gamescanner.data.network.dtos;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class GameListItemDto {
 
+    @Nullable
     @SerializedName("gameID")
-    private String gameId;
-    @SerializedName("steamAppID")
-    private String steamAppId;
-    @SerializedName("cheapest")
-    private float cheapestPrice;
-    @SerializedName("cheapestDealID")
-    private String cheapestDealid;
-    @SerializedName("external")
-    private String title;
-    private String internalName;
-    private String thumb;
+    private final String gameId;
+    @Nullable @SerializedName("steamAppID")
+    private final String steamAppId;
+    @Nullable @SerializedName("cheapest")
+    private final Float cheapestPrice;
+    @Nullable @SerializedName("cheapestDealID")
+    private final String cheapestDealId;
+    @Nullable @SerializedName("external")
+    private final String title;
+    @Nullable private final String internalName;
+    @Nullable private final String thumb;
 
-    public GameListItemDto(String gameId, String steamAppId, float cheapestPrice, String cheapestDealid, String title, String internalName, String thumb) {
+    public GameListItemDto(@Nullable String gameId, @Nullable String steamAppId, @Nullable Float cheapestPrice, @Nullable String cheapestDealId, @Nullable String title, @Nullable String internalName, @Nullable String thumb) {
         this.gameId = gameId;
         this.steamAppId = steamAppId;
         this.cheapestPrice = cheapestPrice;
-        this.cheapestDealid = cheapestDealid;
+        this.cheapestDealId = cheapestDealId;
         this.title = title;
         this.internalName = internalName;
         this.thumb = thumb;
     }
 
+    @Nullable
     public String getGameId() {
         return gameId;
     }
 
+    @Nullable
     public String getSteamAppId() {
         return steamAppId;
     }
 
-    public float getCheapestPrice() {
+    @Nullable
+    public Float getCheapestPrice() {
         return cheapestPrice;
     }
 
+    @Nullable
     public String getCheapestDealId() {
-        return cheapestDealid;
+        return cheapestDealId;
     }
 
+    @Nullable
     public String getTitle() {
         return title;
     }
 
+    @Nullable
     public String getInternalName() {
         return internalName;
     }
 
+    @Nullable
     public String getThumb() {
         return thumb;
     }

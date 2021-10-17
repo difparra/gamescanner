@@ -125,10 +125,10 @@ public class SearchFragment extends Fragment {
                     case LOADING:
                         break;
                     case SUCCESS: {
-                        List<Game> data = listResource.getData();
+                        List<Game> data = Objects.requireNonNull(listResource.getData());
                         Timber.d("data = %s", data);
                         adapter.submitList(data);
-                        if (data != null && data.isEmpty()) {
+                        if (data.isEmpty()) {
                             if (binding.searchView.getQuery().length() == 0) {
                                 binding.message.setText(R.string.search_empty_query);
                             } else {
@@ -140,8 +140,7 @@ public class SearchFragment extends Fragment {
                     }
                     case ERROR: {
                         adapter.submitList(Collections.emptyList());
-                        Throwable error = listResource.getError();
-                        Objects.requireNonNull(error);
+                        Throwable error = Objects.requireNonNull(listResource.getError());
                         String errorMessage = ErrorUtils.getMessage(error, binding.getRoot().getContext());
                         binding.message.setText(errorMessage);
                         break;

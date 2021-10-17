@@ -14,9 +14,10 @@ import com.diegoparra.gamescanner.utils.ViewUtils;
 
 public class DealsLoadStateAdapter extends LoadStateAdapter<DealsLoadStateAdapter.ViewHolder> {
 
+    @NonNull
     private final RetryListener retryListener;
 
-    public DealsLoadStateAdapter(RetryListener retryListener) {
+    public DealsLoadStateAdapter(@NonNull RetryListener retryListener) {
         this.retryListener = retryListener;
     }
 
@@ -39,13 +40,13 @@ public class DealsLoadStateAdapter extends LoadStateAdapter<DealsLoadStateAdapte
 
         private final LoadStateFooterDealsListBinding binding;
 
-        public ViewHolder(LoadStateFooterDealsListBinding binding, RetryListener retryListener) {
+        public ViewHolder(@NonNull LoadStateFooterDealsListBinding binding, @NonNull RetryListener retryListener) {
             super(binding.getRoot());
             this.binding = binding;
             binding.retryButton.setOnClickListener(view -> retryListener.onClick());
         }
 
-        public void bind(LoadState loadState) {
+        public void bind(@NonNull LoadState loadState) {
             if(loadState instanceof LoadState.Error) {
                 String errorMessage = ErrorUtils.getMessage(((LoadState.Error) loadState).getError(),binding.errorMsg.getContext());
                 binding.errorMsg.setText(errorMessage);
@@ -55,7 +56,7 @@ public class DealsLoadStateAdapter extends LoadStateAdapter<DealsLoadStateAdapte
             ViewUtils.isVisible(binding.errorMsg, loadState instanceof LoadState.Error);
         }
 
-        static ViewHolder create(ViewGroup parent, RetryListener retryListener) {
+        static ViewHolder create(@NonNull ViewGroup parent, @NonNull RetryListener retryListener) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             return new ViewHolder(LoadStateFooterDealsListBinding.inflate(inflater, parent, false), retryListener);
         }

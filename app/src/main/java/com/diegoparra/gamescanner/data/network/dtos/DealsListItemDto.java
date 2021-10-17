@@ -1,35 +1,56 @@
 package com.diegoparra.gamescanner.data.network.dtos;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class DealsListItemDto {
 
-    private String internalName;
-    private String title;
-    private String metacriticLink;
+    @Nullable
+    private final String internalName;
+    @Nullable
+    private final String title;
+    @Nullable
+    private final String metacriticLink;
+    @Nullable
     @SerializedName("dealID")
-    private String dealId;
+    private final String dealId;
+    @Nullable
     @SerializedName("storeID")
-    private String storeId;
+    private final String storeId;
+    @Nullable
     @SerializedName("gameID")
-    private String gameId;
-    private float salePrice;
-    private float normalPrice;
-    private boolean isOnSale;
+    private final String gameId;
+    @Nullable
+    private final Float salePrice;
+    @Nullable
+    private final Float normalPrice;
+    @Nullable
+    private final Boolean isOnSale;
+    @Nullable
     @SerializedName("savings")
-    private float discountPercent;
-    private int metacriticScore;
-    private String steamRatingText;
-    private int steamRatingPercent;
-    private long steamRatingCount;
+    private final Float discountPercent;
+    @Nullable
+    private final Integer metacriticScore;
+    @Nullable
+    private final String steamRatingText;
+    @Nullable
+    private final Integer steamRatingPercent;
+    @Nullable
+    private final Long steamRatingCount;
+    @Nullable
     @SerializedName("steamAppID")
-    private String steamAppId;
-    private long releaseDate;
-    private long lastChange;
-    private float dealRating;
-    private String thumb;
+    private final String steamAppId;
+    @Nullable
+    private final Long releaseDate;
+    @Nullable
+    private final Long lastChange;
+    @Nullable
+    private final Float dealRating;
+    @Nullable
+    private final String thumb;
 
-    public DealsListItemDto(String internalName, String title, String metacriticLink, String dealId, String storeId, String gameId, float salePrice, float normalPrice, boolean isOnSale, float discountPercent, int metacriticScore, String steamRatingText, int steamRatingPercent, long steamRatingCount, String steamAppId, long releaseDate, long lastChange, float dealRating, String thumb) {
+    public DealsListItemDto(@Nullable String internalName, @Nullable String title, @Nullable String metacriticLink, @Nullable String dealId, @Nullable String storeId, @Nullable String gameId, @Nullable Float salePrice, @Nullable Float normalPrice, @Nullable Boolean isOnSale, @Nullable Float discountPercent, @Nullable Integer metacriticScore, @Nullable String steamRatingText, @Nullable Integer steamRatingPercent, @Nullable Long steamRatingCount, @Nullable String steamAppId, @Nullable Long releaseDate, @Nullable Long lastChange, @Nullable Float dealRating, @Nullable String thumb) {
         this.internalName = internalName;
         this.title = title;
         this.metacriticLink = metacriticLink;
@@ -51,78 +72,97 @@ public class DealsListItemDto {
         this.thumb = thumb;
     }
 
+    @Nullable
     public String getInternalName() {
         return internalName;
     }
 
+    @Nullable
     public String getTitle() {
         return title;
     }
 
+    @Nullable
     public String getMetacriticLink() {
         return metacriticLink;
     }
 
+    @Nullable
     public String getDealId() {
         return dealId;
     }
 
+    @Nullable
     public String getStoreId() {
         return storeId;
     }
 
+    @Nullable
     public String getGameId() {
         return gameId;
     }
 
-    public float getSalePrice() {
+    @Nullable
+    public Float getSalePrice() {
         return salePrice;
     }
 
-    public float getNormalPrice() {
+    @Nullable
+    public Float getNormalPrice() {
         return normalPrice;
     }
 
-    public boolean isOnSale() {
+    @Nullable
+    public Boolean getOnSale() {
         return isOnSale;
     }
 
-    public float getDiscountPercent() {
+    @Nullable
+    public Float getDiscountPercent() {
         return discountPercent;
     }
 
-    public int getMetacriticScore() {
+    @Nullable
+    public Integer getMetacriticScore() {
         return metacriticScore;
     }
 
+    @Nullable
     public String getSteamRatingText() {
         return steamRatingText;
     }
 
-    public int getSteamRatingPercent() {
+    @Nullable
+    public Integer getSteamRatingPercent() {
         return steamRatingPercent;
     }
 
-    public long getSteamRatingCount() {
+    @Nullable
+    public Long getSteamRatingCount() {
         return steamRatingCount;
     }
 
+    @Nullable
     public String getSteamAppId() {
         return steamAppId;
     }
 
-    public long getReleaseDate() {
+    @Nullable
+    public Long getReleaseDate() {
         return releaseDate;
     }
 
-    public long getLastChange() {
+    @Nullable
+    public Long getLastChange() {
         return lastChange;
     }
 
-    public float getDealRating() {
+    @Nullable
+    public Float getDealRating() {
         return dealRating;
     }
 
+    @Nullable
     public String getThumb() {
         return thumb;
     }

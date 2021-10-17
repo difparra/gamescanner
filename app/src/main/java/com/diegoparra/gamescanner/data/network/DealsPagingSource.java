@@ -21,9 +21,10 @@ public class DealsPagingSource extends RxPagingSource<Integer, DealWithGameInfo>
 
     @NonNull
     private final GamesApi api;
+    @NonNull
     private final DtoMappers dtoMappers;
 
-    public DealsPagingSource(@NonNull GamesApi gamesApi, DtoMappers dtoMappers) {
+    public DealsPagingSource(@NonNull GamesApi gamesApi, @NonNull DtoMappers dtoMappers) {
         this.api = gamesApi;
         this.dtoMappers = dtoMappers;
     }

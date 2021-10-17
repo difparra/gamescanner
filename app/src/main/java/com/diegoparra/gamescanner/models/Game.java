@@ -11,16 +11,31 @@ import java.util.Objects;
 
 public class Game {
 
-    private String gameId;
-    private String title;
-    private String imageUrl;
-    private SteamInfo steamInfo;
-    private MetacriticInfo metacriticInfo;
-    private Instant releaseDate;
-    private String cheapestDealId;
-    private Float cheapestCurrentPrice;
+    @NonNull
+    private final String gameId;
+    @NonNull
+    private final String title;
+    @Nullable
+    private final String imageUrl;
+    @Nullable
+    private final SteamInfo steamInfo;
+    @Nullable
+    private final MetacriticInfo metacriticInfo;
+    @Nullable
+    private final Instant releaseDate;
+    @Nullable
+    private final String cheapestDealId;
+    @Nullable
+    private final Float cheapestCurrentPrice;
 
-    public Game(String gameId, String title, String imageUrl, SteamInfo steamInfo, MetacriticInfo metacriticInfo, Instant releaseDate, String cheapestDealId, Float cheapestCurrentPrice) {
+    public Game(@NonNull String gameId,
+                @NonNull String title,
+                @Nullable String imageUrl,
+                @Nullable SteamInfo steamInfo,
+                @Nullable MetacriticInfo metacriticInfo,
+                @Nullable Instant releaseDate,
+                @Nullable String cheapestDealId,
+                @Nullable Float cheapestCurrentPrice) {
         this.gameId = gameId;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -31,26 +46,32 @@ public class Game {
         this.cheapestCurrentPrice = cheapestCurrentPrice;
     }
 
+    @NonNull
     public String getGameId() {
         return gameId;
     }
 
+    @NonNull
     public String getTitle() {
         return title;
     }
 
+    @Nullable
     public String getImageUrl() {
         return imageUrl;
     }
 
+    @Nullable
     public SteamInfo getSteamInfo() {
         return steamInfo;
     }
 
+    @Nullable
     public MetacriticInfo getMetacriticInfo() {
         return metacriticInfo;
     }
 
+    @Nullable
     public LocalDate getReleaseDate() {
         if (releaseDate != null && releaseDate.getEpochSecond() > 0) {
             return LocalDateTime.ofInstant(releaseDate, ZoneId.systemDefault()).toLocalDate();
@@ -79,6 +100,8 @@ public class Game {
                 ", steamInfo=" + steamInfo +
                 ", metacriticInfo=" + metacriticInfo +
                 ", releaseDate=" + releaseDate +
+                ", cheapestDealId='" + cheapestDealId + '\'' +
+                ", cheapestCurrentPrice=" + cheapestCurrentPrice +
                 '}';
     }
 
@@ -87,11 +110,11 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return gameId.equals(game.gameId) && Objects.equals(title, game.title) && Objects.equals(imageUrl, game.imageUrl) && Objects.equals(steamInfo, game.steamInfo) && Objects.equals(metacriticInfo, game.metacriticInfo) && Objects.equals(releaseDate, game.releaseDate);
+        return gameId.equals(game.gameId) && title.equals(game.title) && Objects.equals(imageUrl, game.imageUrl) && Objects.equals(steamInfo, game.steamInfo) && Objects.equals(metacriticInfo, game.metacriticInfo) && Objects.equals(releaseDate, game.releaseDate) && Objects.equals(cheapestDealId, game.cheapestDealId) && Objects.equals(cheapestCurrentPrice, game.cheapestCurrentPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameId, title, imageUrl, steamInfo, metacriticInfo, releaseDate);
+        return Objects.hash(gameId, title, imageUrl, steamInfo, metacriticInfo, releaseDate, cheapestDealId, cheapestCurrentPrice);
     }
 }

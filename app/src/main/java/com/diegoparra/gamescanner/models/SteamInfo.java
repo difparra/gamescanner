@@ -1,30 +1,34 @@
 package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
 public class SteamInfo {
 
-    private String ratingText;
-    private int ratingPercent;
-    private long ratingCount;
+    @Nullable private final String ratingText;
+    @Nullable private final Integer ratingPercent;
+    @Nullable private final Long ratingCount;
 
-    public SteamInfo(String ratingText, int ratingPercent, long ratingCount) {
+    public SteamInfo(@Nullable String ratingText, @Nullable Integer ratingPercent, @Nullable Long ratingCount) {
         this.ratingText = ratingText;
         this.ratingPercent = ratingPercent;
         this.ratingCount = ratingCount;
     }
 
+    @Nullable
     public String getRatingText() {
         return ratingText;
     }
 
-    public int getRatingPercent() {
+    @Nullable
+    public Integer getRatingPercent() {
         return ratingPercent;
     }
 
-    public long getRatingCount() {
+    @Nullable
+    public Long getRatingCount() {
         return ratingCount;
     }
 
@@ -43,7 +47,7 @@ public class SteamInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SteamInfo steamInfo = (SteamInfo) o;
-        return ratingPercent == steamInfo.ratingPercent && ratingCount == steamInfo.ratingCount && Objects.equals(ratingText, steamInfo.ratingText);
+        return Objects.equals(ratingText, steamInfo.ratingText) && Objects.equals(ratingPercent, steamInfo.ratingPercent) && Objects.equals(ratingCount, steamInfo.ratingCount);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.diegoparra.gamescanner.ui.home;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MutableLiveData;
@@ -22,12 +23,13 @@ import kotlinx.coroutines.CoroutineScope;
 @HiltViewModel
 public class HomeViewModel extends ViewModel {
 
+    @NonNull
     private final GamesRepository repository;
     private final LiveData<PagingData<DealWithGameInfo>> dealWithGameInfoList;
     private final MutableLiveData<Event<String>> navigateDetails = new MutableLiveData<>();
 
     @Inject
-    public HomeViewModel(GamesRepository gamesRepository) {
+    public HomeViewModel(@NonNull GamesRepository gamesRepository) {
         this.repository = gamesRepository;
 
         Flowable<PagingData<DealWithGameInfo>> dealsRawFlowable = getDealWithGameInfoListFlowable();
@@ -42,10 +44,9 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-
     //      ----------      Public methods viewModel       --------------------------------------------
 
-    public void navigateDetails(String dealId) {
+    public void navigateDetails(@NonNull String dealId) {
         navigateDetails.setValue(new Event<>(dealId));
     }
 

@@ -79,7 +79,7 @@ public class SearchViewModel extends ViewModel {
         this.query.onNext(query);
     }
 
-    public void navigateDetails(String dealId) {
+    public void navigateDetails(@NonNull String dealId) {
         navigateDetails.setValue(new Event<>(dealId));
     }
 

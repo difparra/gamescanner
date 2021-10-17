@@ -1,19 +1,31 @@
 package com.diegoparra.gamescanner.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
 public class Store {
 
-    private String id;
-    private String name;
-    private boolean isActive;
-    private String bannerUrl;
-    private String logoUrl;
-    private String iconUrl;
+    @NonNull
+    private final String id;
+    @NonNull
+    private final String name;
+    @Nullable
+    private final Boolean isActive;
+    @Nullable
+    private final String bannerUrl;
+    @Nullable
+    private final String logoUrl;
+    @Nullable
+    private final String iconUrl;
 
-    public Store(String id, String name, boolean isActive, String bannerUrl, String logoUrl, String iconUrl) {
+    public Store(@NonNull String id,
+                 @NonNull String name,
+                 @Nullable Boolean isActive,
+                 @Nullable String bannerUrl,
+                 @Nullable String logoUrl,
+                 @Nullable String iconUrl) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
@@ -22,26 +34,32 @@ public class Store {
         this.iconUrl = iconUrl;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
-    public boolean isActive() {
+    @Nullable
+    public Boolean isActive() {
         return isActive;
     }
 
+    @Nullable
     public String getBannerUrl() {
         return bannerUrl;
     }
 
+    @Nullable
     public String getLogoUrl() {
         return logoUrl;
     }
 
+    @Nullable
     public String getIconUrl() {
         return iconUrl;
     }
@@ -64,7 +82,7 @@ public class Store {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Store store = (Store) o;
-        return isActive == store.isActive && id.equals(store.id) && Objects.equals(name, store.name) && Objects.equals(bannerUrl, store.bannerUrl) && Objects.equals(logoUrl, store.logoUrl) && Objects.equals(iconUrl, store.iconUrl);
+        return id.equals(store.id) && name.equals(store.name) && Objects.equals(isActive, store.isActive) && Objects.equals(bannerUrl, store.bannerUrl) && Objects.equals(logoUrl, store.logoUrl) && Objects.equals(iconUrl, store.iconUrl);
     }
 
     @Override
