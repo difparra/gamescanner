@@ -46,7 +46,9 @@ public class ListUtils {
             String printStr = print.apply(element);
             str.append(printStr).append(separator);
         }
-        str.delete(str.length() - separator.length(), str.length());
+        if (str.length() - separator.length() >= 0) {
+            str.delete(str.length() - separator.length(), str.length());
+        }
         return str.toString();
     }
 

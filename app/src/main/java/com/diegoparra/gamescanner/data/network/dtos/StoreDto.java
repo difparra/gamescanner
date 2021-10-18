@@ -18,7 +18,7 @@ public class StoreDto {
     @Nullable
     private final Map<String, String> images;
 
-    public StoreDto(@Nullable String storeId, @Nullable String storeName, int isActive, @Nullable Map<String, String> images) {
+    public StoreDto(@Nullable String storeId, @Nullable String storeName, @Nullable Integer isActive, @Nullable Map<String, String> images) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.isActive = isActive;

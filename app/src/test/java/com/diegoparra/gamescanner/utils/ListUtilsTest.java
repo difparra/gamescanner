@@ -58,4 +58,11 @@ public class ListUtilsTest {
         assertThat(result).isEqualTo("element1, element2, element3");
     }
 
+    @Test
+    public void joinToString_emptyList_returnEmptyString() {
+        List<String> list = Collections.emptyList();
+        String result = ListUtils.joinToString(list, s -> s, ", ");
+        assertThat(result).isEqualTo("");
+    }
+
 }

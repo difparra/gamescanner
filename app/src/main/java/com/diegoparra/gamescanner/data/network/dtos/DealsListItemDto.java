@@ -26,7 +26,7 @@ public class DealsListItemDto {
     @Nullable
     private final Float normalPrice;
     @Nullable
-    private final Boolean isOnSale;
+    private final Integer isOnSale;
     @Nullable
     @SerializedName("savings")
     private final Float discountPercent;
@@ -50,7 +50,7 @@ public class DealsListItemDto {
     @Nullable
     private final String thumb;
 
-    public DealsListItemDto(@Nullable String internalName, @Nullable String title, @Nullable String metacriticLink, @Nullable String dealId, @Nullable String storeId, @Nullable String gameId, @Nullable Float salePrice, @Nullable Float normalPrice, @Nullable Boolean isOnSale, @Nullable Float discountPercent, @Nullable Integer metacriticScore, @Nullable String steamRatingText, @Nullable Integer steamRatingPercent, @Nullable Long steamRatingCount, @Nullable String steamAppId, @Nullable Long releaseDate, @Nullable Long lastChange, @Nullable Float dealRating, @Nullable String thumb) {
+    public DealsListItemDto(@Nullable String internalName, @Nullable String title, @Nullable String metacriticLink, @Nullable String dealId, @Nullable String storeId, @Nullable String gameId, @Nullable Float salePrice, @Nullable Float normalPrice, @Nullable Integer isOnSale, @Nullable Float discountPercent, @Nullable Integer metacriticScore, @Nullable String steamRatingText, @Nullable Integer steamRatingPercent, @Nullable Long steamRatingCount, @Nullable String steamAppId, @Nullable Long releaseDate, @Nullable Long lastChange, @Nullable Float dealRating, @Nullable String thumb) {
         this.internalName = internalName;
         this.title = title;
         this.metacriticLink = metacriticLink;
@@ -114,7 +114,11 @@ public class DealsListItemDto {
 
     @Nullable
     public Boolean getOnSale() {
-        return isOnSale;
+        if(isOnSale == null) {
+            return null;
+        }else {
+            return isOnSale == 1;
+        }
     }
 
     @Nullable
