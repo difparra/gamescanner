@@ -15,6 +15,19 @@ public class FakeDataStores {
         return imagesMap;
     }
 
+    public static StoreDto copy(StoreDto storeDto, String storeId) {
+        return new StoreDto(
+                storeId,
+                storeDto.getStoreName(),
+                (storeDto.isActive() == null) ? null : (storeDto.isActive() ? 1 : 0),
+                createStoreImagesMap(
+                        storeDto.getImgBanner(),
+                        storeDto.getImgLogo(),
+                        storeDto.getImgIcon()
+                )
+        );
+    }
+
 
     public static StoreDto storeDto1 = new StoreDto(
             "1",

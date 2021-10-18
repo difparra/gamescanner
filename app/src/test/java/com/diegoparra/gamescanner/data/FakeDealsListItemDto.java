@@ -26,7 +26,7 @@ public class FakeDealsListItemDto {
             "https://cdn.cloudflare.steamstatic.com/steam/apps/1414850/capsule_sm_120.jpg?t=1634078339"
     );
 
-    public static DealsListItemDto dealsListItemDto2 = new DealsListItemDto(
+    public static DealsListItemDto dealListItemDto2 = new DealsListItemDto(
             "TANKWARFARETUNISIA1943COMPLETEEDITION",
             "Tank Warfare: Tunisia 1943 Complete Edition",
             null,
@@ -48,7 +48,7 @@ public class FakeDealsListItemDto {
             "https://gamersgatep.imgix.net/8/8/c/6a3503fc7bf4cd591512b0ac02a2a1f98a40ec88.jpg?auto=&w="
     );
 
-    public static DealsListItemDto dealsListItemDto3 = new DealsListItemDto(
+    public static DealsListItemDto dealListItemDto3 = new DealsListItemDto(
             "DYINGLIGHTPLATINUMEDITION",
             "Dying Light - Platinum Edition",
             "/game/pc/dying-light-platinum-edition",

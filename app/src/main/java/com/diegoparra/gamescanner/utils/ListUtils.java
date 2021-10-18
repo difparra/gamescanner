@@ -22,6 +22,26 @@ public class ListUtils {
         return newList;
     }
 
+    /**
+     * Same as mapping, but in this case the final mapped list cannot contain null values.
+     * Values that are null during the mapping, will be removed from the mapped list,
+     * instead of keeping them as null in mapped list.
+     */
+    @NonNull
+    public static <T, R> List<R> mapNotNull(@NonNull List<T> list, @NonNull Function<? super T, ? extends R> mapper) {
+        Objects.requireNonNull(list);
+        Objects.requireNonNull(mapper);
+
+        List<R> newList = new ArrayList<R>(list.size());
+        for (T element : list) {
+            R newElement = mapper.apply(element);
+            if (newElement != null) {
+                newList.add(newElement);
+            }
+        }
+        return newList;
+    }
+
     @Nullable
     public static <T> T find(@NonNull List<T> list, @NonNull Function<? super T, Boolean> block) {
         Objects.requireNonNull(list);

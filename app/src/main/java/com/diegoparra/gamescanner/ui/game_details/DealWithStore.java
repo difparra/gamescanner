@@ -37,6 +37,14 @@ public class DealWithStore {
     }
 
     @Override
+    public String toString() {
+        return "DealWithStore{" +
+                "deal=" + deal +
+                ", store=" + store +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

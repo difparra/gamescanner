@@ -30,6 +30,36 @@ public class ListUtilsTest {
     }
 
     @Test
+    public void map_mappingNullCase_returnMappedListWithNullValue() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        List<Integer> mappedList = ListUtils.map(list, integer -> integer == 3 ? null : integer);
+        assertThat(mappedList).isEqualTo(Arrays.asList(1,2,null,4));
+    }
+
+    @Test
+    public void mapNotNull_simpleCaseNoNullMapping_returnMappedList() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        List<Integer> mappedList = ListUtils.mapNotNull(list, integer -> integer);
+        assertThat(mappedList).isEqualTo(Arrays.asList(1,2,3,4));
+    }
+
+    @Test
+    public void mapNotNull_mappingTurnNull_returnMappedListWithoutNulls() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        List<Integer> mappedList = ListUtils.mapNotNull(list, integer -> integer == 3 ? null : integer);
+        assertThat(mappedList).isEqualTo(Arrays.asList(1,2,4));
+    }
+
+    @Test
+    public void mapNotNull_allValuesTurnNull_returnEmptyList() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        List<Integer> mappedList = ListUtils.mapNotNull(list, integer -> null);
+        assertThat(mappedList).isEqualTo(Collections.emptyList());
+    }
+
+
+
+    @Test
     public void find_emptyList_returnNull() {
         List<String> emptyList = Collections.emptyList();
         String result = ListUtils.find(emptyList, s -> true);

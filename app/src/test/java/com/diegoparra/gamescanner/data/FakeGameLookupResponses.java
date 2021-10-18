@@ -18,6 +18,15 @@ public class FakeGameLookupResponses {
         return map;
     }
 
+    public static final DealDto dealDto1 = new DealDto(
+            "21",
+            "on3LSvb5YoZJvxvvcndY3GYjXMWBgqoj30gdJVJ%2Bkdc%3D",
+            33.98f,
+            49.99f,
+            32.026405f
+    );
+
+
     public static GameLookupResponse gameLookupResponse1 = new GameLookupResponse(
             createInfoMap("Nickelodeon All-Star Brawl", "1414850", "https://cdn.cloudflare.steamstatic.com/steam/apps/1414850/capsule_sm_120.jpg?t=1634078339"),
             new CheapestPriceDto(33.98f, 1633553074L),

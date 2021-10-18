@@ -1,6 +1,7 @@
 package com.diegoparra.gamescanner.ui.search;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MutableLiveData;
@@ -29,8 +30,8 @@ import timber.log.Timber;
 @HiltViewModel
 public class SearchViewModel extends ViewModel {
 
-    private static final String QUERY_SAVED_STATE_KEY = "query";
-    private static final String INITIAL_QUERY = "";
+    static final String QUERY_SAVED_STATE_KEY = "query";
+    static final String INITIAL_QUERY = "";
     private final SavedStateHandle savedStateHandle;
 
     private final BehaviorSubject<String> query = BehaviorSubject.create();
@@ -70,7 +71,10 @@ public class SearchViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io());
     }
 
-
+    @VisibleForTesting
+    public BehaviorSubject<String> getQuery() {
+        return query;
+    }
 
     //      ----------      Public methods viewModel       --------------------------------------------
 

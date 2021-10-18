@@ -96,6 +96,7 @@ dependencies {
     testImplementation "junit:junit:$jUnitVersion"
     testImplementation "com.google.truth:truth:$truthAssertionsVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
 
 
     androidTestImplementation "androidx.test.ext:junit:$androidJUnitVersion"

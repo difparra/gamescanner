@@ -80,6 +80,9 @@ public class DealDetailsFragment extends Fragment {
         viewModel.getDealWithGameInfo().observe(getViewLifecycleOwner(), new Observer<Resource<DealWithGameAndStoreInfo>>() {
             @Override
             public void onChanged(Resource<DealWithGameAndStoreInfo> dealWithGameAndStoreInfo) {
+                ViewUtils.isVisible(binding.content, dealWithGameAndStoreInfo.getStatus() == Resource.Status.SUCCESS);
+                ViewUtils.isVisible(binding.errorMessage, dealWithGameAndStoreInfo.getStatus() == Resource.Status.ERROR);
+
                 switch (dealWithGameAndStoreInfo.getStatus()) {
                     case SUCCESS: {
                         DealWithGameAndStoreInfo data = Objects.requireNonNull(dealWithGameAndStoreInfo.getData());
@@ -143,7 +146,11 @@ public class DealDetailsFragment extends Fragment {
             }
 
             private void loadDealAndStoreInfo(@NonNull Deal deal, @NonNull Store store) {
-                binding.cardSelectedDeal.setOnClickListener(view -> openGoToDealLink(deal.getGoToDealLink()));
+                binding.cardSelectedDeal.setOnClickListener(view -> {
+                    if (deal.getGoToDealLink() != null) {
+                        openGoToDealLink(deal.getGoToDealLink());
+                    }
+                });
 
                 ImageUtils.loadImageWithPlaceholderAndError(binding.selectedDealLogo, store.getBannerUrl());
 
@@ -161,6 +168,9 @@ public class DealDetailsFragment extends Fragment {
         viewModel.getAdditionalDealsWithStoreInfo().observe(getViewLifecycleOwner(), new Observer<Resource<List<DealWithStore>>>() {
             @Override
             public void onChanged(Resource<List<DealWithStore>> dealWithStores) {
+                ViewUtils.isVisible(binding.content, dealWithStores.getStatus() == Resource.Status.SUCCESS);
+                ViewUtils.isVisible(binding.errorMessage, dealWithStores.getStatus() == Resource.Status.ERROR);
+
                 switch (dealWithStores.getStatus()) {
                     case SUCCESS: {
                         List<DealWithStore> data = dealWithStores.getData();
@@ -170,8 +180,7 @@ public class DealDetailsFragment extends Fragment {
                     }
                     case ERROR: {
                         adapter.submitList(Collections.emptyList());
-                        Throwable error = dealWithStores.getError();
-                        Objects.requireNonNull(error);
+                        Throwable error = Objects.requireNonNull(dealWithStores.getError());
                         displayError(error);
                         break;
                     }
@@ -192,8 +201,8 @@ public class DealDetailsFragment extends Fragment {
     }
 
     private void displayError(@NonNull Throwable error) {
-        String message = ErrorUtils.getMessage(error, binding.getRoot().getContext());
-        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+        String errorMessage = ErrorUtils.getMessage(error, binding.getRoot().getContext());
+        binding.errorMessage.setText(errorMessage);
     }
 
     @Override

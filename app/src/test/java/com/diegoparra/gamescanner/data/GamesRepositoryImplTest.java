@@ -99,7 +99,7 @@ public class GamesRepositoryImplTest {
     @Test
     public void getDealsByGameTitle_success_returnSuccess() {
         String title = "title";
-        List<DealsListItemDto> dealsListItemDtoList = Arrays.asList(FakeDealsListItemDto.dealListItemDto1, FakeDealsListItemDto.dealsListItemDto2);
+        List<DealsListItemDto> dealsListItemDtoList = Arrays.asList(FakeDealsListItemDto.dealListItemDto1, FakeDealsListItemDto.dealListItemDto2);
         Mockito.when(gamesApi.getDealsByTitle(title)).thenReturn(Single.just(dealsListItemDtoList));
         repository.getDealsByGameTitle(title)
                 .test()

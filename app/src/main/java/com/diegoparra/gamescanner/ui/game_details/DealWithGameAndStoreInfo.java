@@ -7,6 +7,8 @@ import com.diegoparra.gamescanner.models.DealWithGameInfo;
 import com.diegoparra.gamescanner.models.Game;
 import com.diegoparra.gamescanner.models.Store;
 
+import java.util.Objects;
+
 /**
  * This class is intended just as a wrapper to pass data to the DealsAdapter.
  * It is not part of the domain or business layer, is just to wrap some models around and pass as
@@ -39,5 +41,27 @@ public class DealWithGameAndStoreInfo {
     @NonNull
     public Store getStore() {
         return store;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "DealWithGameAndStoreInfo{" +
+                "dealWithGameInfo=" + dealWithGameInfo +
+                ", store=" + store +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DealWithGameAndStoreInfo that = (DealWithGameAndStoreInfo) o;
+        return dealWithGameInfo.equals(that.dealWithGameInfo) && store.equals(that.store);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dealWithGameInfo, store);
     }
 }
